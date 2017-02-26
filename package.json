@@ -1,0 +1,25 @@
+{
+  "name": "vexdb",
+  "version": "0.0.0",
+  "description": "A simple tool for accessing the VexDB",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git+https://github.com/MayorMonty/vexdb.git",
+  "keywords": [
+    "vexdb",
+    "vrc",
+    "vex",
+    "robotics",
+    "database",
+    "rest",
+    "api"
+  ],
+  "author": "Brendan McGuire",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MayorMonty/vexdb/issues"
+  },
+  "homepage": "https://github.com/MayorMonty/vexdb#readme"
+}
