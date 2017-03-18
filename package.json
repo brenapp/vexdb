@@ -1,6 +1,6 @@
 {
   "name": "vexdb",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A simple tool for accessing the VexDB",
   "main": "main.js",
   "scripts": {
@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/MayorMonty/vexdb/issues"
   },
-  "homepage": "https://github.com/MayorMonty/vexdb#readme"
+  "homepage": "https://github.com/MayorMonty/vexdb#readme",
+  "dependencies": {
+    "axios": "^0.15.3"
+  }
 }

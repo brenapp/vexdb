@@ -1,22 +1,4 @@
-var https = require("https");
-
-/**
- * Serializes an object into URL parameters
- * @method serialize
- * @param  {Object}  obj The object to serialize
- * @return {String}      The String of URL parameters
- */
-function serialize (obj) {
-  var str = ""
-  for (var key in obj) {
-    if (str !== "") {
-      str += "&"
-    }
-    str += key + "=" + encodeURIComponent(obj[key])
-  }
-
-  return str
-}
+var axios = require("axios");
 
 /**
  * Makes a reqest to the vexDB API
@@ -26,21 +8,11 @@ function serialize (obj) {
  * @return {Promise}
  */
 function request (endpoint, params) {
-  let url = `https://api.vexdb.io/v1/get_${endpoint}?${serialize(params)}`,
+  let url = `https://api.vexdb.io/v1/get_${endpoint}`,
       output = "";
-  return new Promise(function (resolve, reject) {
-    https.get(url, res => {
-      res.on("data", chunk => output += chunk);
-      res.on("end", () => {
-        let resp = JSON.parse(output);
-        if(resp.status) {
-          resolve(resp);
-        } else {
-          reject(new Error(resp.error_text));
-        }
-      });
-    }).on("error", e => reject(e));
-  });
+  console.log(`GET ${url}`)
+  return axios.get(url, params)
+    .then(res => res.data.status ? res.data : Promise.reject(new Error(res.data.error_text)))
 }
 
 /**
@@ -51,7 +23,7 @@ function request (endpoint, params) {
  * @return {Promise}
  */
 function get (endpoint, params) {
-  return request(endpoint, params).then(res => res.result)
+  return request(endpoint, params).then(res => res.result).catch(e => { throw e })
 }
 
 /**
