@@ -8,6 +8,23 @@ var axios = require("axios");
  * @return {Promise}
  */
 function request (endpoint, params) {
+
+  // Validate endpoint against known, to avoid unneeded requests
+  let known = [
+    "events",
+    "teams",
+    "matches",
+    "rankings",
+    "season_rankings",
+    "awards",
+    "skills"
+  ];
+
+  if (!known.includes(endpoint))
+    return Promise.reject(
+      new RangeError("Endpoint '" + endpoint + "' not known. Valid endpoints are " + known.join(", "))
+    )
+
   let url = `https://api.vexdb.io/v1/get_${endpoint}`,
       output = "";
   console.log(`GET ${url}`)
