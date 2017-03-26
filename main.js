@@ -71,7 +71,7 @@ function request (endpoint, params) {
 
   return axios.get(url, {
     headers: globalOptions.headers,
-    params: Object.assign(globalOptions.defaultParams, params)
+    params: Object.assign({}, globalOptions.defaultParams, params)
   }).then(res => res.data.status ? res.data : Promise.reject(new Error(res.data.error_text)))
 }
 
