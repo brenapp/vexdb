@@ -1,4 +1,45 @@
-var axios = require("axios");
+var axios = require("axios"),
+    libURL = require("url");
+
+
+axios.defaults.baseURL = "https://api.vexdb.io/v1/";
+
+var options = {
+  "defaultParams": {
+
+  },
+  "headers": {
+
+  }
+}
+
+/**
+ * Configure requests, to add things like default parameters, User Agent, etc
+ * @method configure
+ * @param  {Object}  changes Any changes to the default options, outlined below
+ * @param  {Object}  changes.defaultParams Specify default parameters, like always limiting to a region, or season. This are mixed with specified parameters (and specified parameters take precendence)
+ * @param  {Object}  changes.headers Include any headers to include with all requests, like User-Agent
+ * @return {Object}          The updated options object
+ */
+function configure(changes) {
+
+  // Iterate over headers, add them if they don't exist, modify them if they do
+  for (var newHeader in changes.headers) {
+    if (changes.headers.hasOwnProperty(newHeader)) {
+      options.headers[newHeader] = changes.headers[newHeader]
+    }
+  }
+
+  // Iterate over defaultParams, add them if they don't exist, modify them if they do
+  for (var newParam in changes.defaultParams) {
+    if (changes.defaultParams.hasOwnProperty(newParam)) {
+      options.defaultParams[newParam] = changes.defaultParams[newParam]
+    }
+  }
+
+  return options;
+}
+
 
 /**
  * Makes a reqest to the vexDB API
@@ -25,11 +66,13 @@ function request (endpoint, params) {
       new RangeError("Endpoint '" + endpoint + "' not known. Valid endpoints are " + known.join(", "))
     )
 
-  let url = `https://api.vexdb.io/v1/get_${endpoint}`,
+  let url = `/get_${endpoint}`,
       output = "";
-  console.log(`GET ${url}`)
-  return axios.get(url, params)
-    .then(res => res.data.status ? res.data : Promise.reject(new Error(res.data.error_text)))
+
+  return axios.get(url, {
+    headers: options.headers,
+    params: Object.assign(options.defaultParams, params)
+  }).then(res => res.data.status ? res.data : Promise.reject(new Error(res.data.error_text)))
 }
 
 /**
@@ -57,5 +100,6 @@ function size (endpoint, params) {
 module.exports = {
   request,
   get,
-  size
+  size,
+  configure
 }
