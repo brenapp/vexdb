@@ -4,7 +4,7 @@ var axios = require("axios"),
 
 axios.defaults.baseURL = "https://api.vexdb.io/v1/";
 
-var options = {
+var globalOptions = {
   "defaultParams": {
 
   },
@@ -26,18 +26,18 @@ function configure(changes) {
   // Iterate over headers, add them if they don't exist, modify them if they do
   for (var newHeader in changes.headers) {
     if (changes.headers.hasOwnProperty(newHeader)) {
-      options.headers[newHeader] = changes.headers[newHeader]
+      globalOptions.headers[newHeader] = changes.headers[newHeader]
     }
   }
 
   // Iterate over defaultParams, add them if they don't exist, modify them if they do
   for (var newParam in changes.defaultParams) {
     if (changes.defaultParams.hasOwnProperty(newParam)) {
-      options.defaultParams[newParam] = changes.defaultParams[newParam]
+      globalOptions.defaultParams[newParam] = changes.defaultParams[newParam]
     }
   }
 
-  return options;
+  return globalOptions;
 }
 
 
@@ -70,8 +70,8 @@ function request (endpoint, params) {
       output = "";
 
   return axios.get(url, {
-    headers: options.headers,
-    params: Object.assign(options.defaultParams, params)
+    headers: globalOptions.headers,
+    params: Object.assign(globalOptions.defaultParams, params)
   }).then(res => res.data.status ? res.data : Promise.reject(new Error(res.data.error_text)))
 }
 
