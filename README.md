@@ -6,7 +6,7 @@ Install this package with:
 
 or, if you want to use yarn:
 
-    yarn install vexdb
+    yarn add vexdb
 
 ## Usage
 When you `require` the package, you can see the following functions exposed:
