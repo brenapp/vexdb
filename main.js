@@ -2,6 +2,12 @@ var axios = require("axios"),
     libURL = require("url");
 
 
+// Super simple debug function, really useful for promises
+function debug(...value) {
+  console.log(...value);
+  return value;
+}
+
 axios.defaults.baseURL = "https://api.vexdb.io/v1/";
 
 var globalOptions = {
@@ -22,6 +28,9 @@ var globalOptions = {
  * @return {Object}          The updated options object
  */
 function configure(changes) {
+
+  changes.headers = changes.headers || {};
+  changes.defaultParams = changes.defaultParams || {};
 
   // Iterate over headers, add them if they don't exist, modify them if they do
   for (var newHeader in changes.headers) {
@@ -87,6 +96,27 @@ function get (endpoint, params) {
 }
 
 /**
+ * VexDB limits responses to 5000 items. This acts the same as get, but will make enough request to ensure that
+ * all items are returned
+ * @method getAll
+ * @param  {String} endpoint The endpoint to GET
+ * @param  {Object} params   An object of parameters
+ * @return {Promise}
+ */
+function getAll(endpoint, params) {
+  return size(endpoint, Object.assign({}, params || {}))
+    .then(
+      items =>
+      Promise.all(
+        [...Array(Math.ceil(items / 5000))]
+          .map(
+            (v, i) => get(endpoint, Object.assign(params, { limit_start: 5000 * i }))
+          )
+        ).then( result => result.reduce((a,b) => a.concat(b)) )
+    )
+}
+
+/**
  * Gets the size of an endpoint with parameters. It performs a nodata request and resolves the number of results
  * @method size
  * @param  {String} endpoint The endpoint to get the size of
@@ -100,6 +130,7 @@ function size (endpoint, params) {
 module.exports = {
   request,
   get,
+  getAll,
   size,
   configure
 }
