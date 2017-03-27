@@ -9,4 +9,4 @@ or, if you want to use yarn:
     yarn add vexdb
 
 ## API
-See [API.h](https://github.com/MayorMonty/vexdb/blob/master/API.h)
+See [API.md](https://github.com/MayorMonty/vexdb/blob/master/API.md)
