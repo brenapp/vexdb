@@ -52,7 +52,7 @@ function configure(changes) {
 
 /**
  * Makes a reqest to the vexDB API
- * @method vexdb
+ * @method request
  * @param  {String} endpoint The endpoint to request, must be events, teams, matches, rankings, season_rankings, awards, or skills
  * @param  {Object} params   Any URL parameters to specify, in Object form. See the relevant API docs page for more info
  * @return {Promise}

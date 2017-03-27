@@ -3,7 +3,7 @@
 ### Table of Contents
 
 -   [configure](#configure)
--   [vexdb](#vexdb)
+-   [request](#request)
 -   [get](#get)
 -   [getAll](#getall)
 -   [size](#size)
@@ -20,7 +20,7 @@ Configure requests, to add things like default parameters, User Agent, etc
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** The updated options object
 
-## vexdb
+## request
 
 Makes a reqest to the vexDB API
 
