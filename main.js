@@ -3,9 +3,9 @@ var axios = require("axios"),
 
 
 // Super simple debug function, really useful for promises
-function debug(...value) {
-  console.log(...value);
-  return value;
+function debug(value) {
+  console.log(value);
+  return value[0];
 }
 
 axios.defaults.baseURL = "https://api.vexdb.io/v1/";
