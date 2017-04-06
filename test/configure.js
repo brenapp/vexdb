@@ -1,6 +1,6 @@
 import test from "ava";
 import { configure, get } from '../main';
-
+import { version } from "../package"
 
 test("Register a header", t => {
   t.deepEqual(
@@ -13,7 +13,7 @@ test("Register a header", t => {
       "defaultParams": {},
       "headers": {
         "a": "b",
-        "User-Agent": "vexdb/0.3.9 (Node.js like JavaScript) <https://npm.im/vexdb>"
+        "User-Agent": `vexdb/${version} (Node.js like JavaScript) <https://npm.im/vexdb>`
       }
     }
     )
