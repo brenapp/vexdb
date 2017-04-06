@@ -1,5 +1,4 @@
-# VexDB
-
+# VexDB [![Build Status](https://travis-ci.org/MayorMonty/vexdb.svg?branch=master)](https://travis-ci.org/MayorMonty/vexdb)
 Install this package with:
 
     yarn add vexdb

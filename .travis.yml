@@ -1,0 +1,10 @@
+language: node_js
+sudo: false
+nodejs: "7.7"
+
+install:
+  npm i -d
+  npm i
+
+script:
+  npm test
