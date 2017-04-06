@@ -3,9 +3,9 @@ sudo: false
 nodejs: "7.7"
 
 install:
-  yarn -D
-  yarn
-  yarn global add ava
+  - yarn -D
+  - yarn
+  - yarn global add ava
 
 script:
   npm test
