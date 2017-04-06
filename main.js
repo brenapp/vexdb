@@ -34,7 +34,7 @@ cache.current = {
 }
 
 /**
- * Set the Time-To-Live for all upcoming caches. Note that this does not affect old caches, their TTL will still be the same 
+ * Set the Time-To-Live for all upcoming caches. Note that this does not affect old caches, their TTL will still be the same
  * @method cache.setTTL
  * @param  {Number} ttl The Time-To-Live, in milliseconds. Set to 0 for no caching
  * @return {Object}     The current cache.current
@@ -115,19 +115,8 @@ function configure(changes) {
   changes.headers = changes.headers || {};
   changes.defaultParams = changes.defaultParams || {};
 
-  // Iterate over headers, add them if they don't exist, modify them if they do
-  for (var newHeader in changes.headers) {
-    if (changes.headers.hasOwnProperty(newHeader)) {
-      globalOptions.headers[newHeader] = changes.headers[newHeader]
-    }
-  }
-
-  // Iterate over defaultParams, add them if they don't exist, modify them if they do
-  for (var newParam in changes.defaultParams) {
-    if (changes.defaultParams.hasOwnProperty(newParam)) {
-      globalOptions.defaultParams[newParam] = changes.defaultParams[newParam]
-    }
-  }
+  Object.assign(globalOptions.headers, changes.headers);
+  Object.assign(globalOptions.defaultParams, changes.defaultParams);
 
   return globalOptions;
 }
