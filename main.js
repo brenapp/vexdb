@@ -4,7 +4,7 @@ var axios = require("axios"),
 
 
 /**
- * Caches a url to a value
+ * Since VexDB updates every 4 minutes, it can oftentimes be wasteful to send the same request twice in a similar timespan, default 4 minutes. Use cache to control the inner cache that this module uses
  * @method cache
  * @param  {String} url   The URL to cache for
  * @param  {Object} value The object to cache for that URL
@@ -18,22 +18,23 @@ function cache(url, value) {
   }
 }
 
-// VexDB updates every 4 minutes, you don't need to repeat requests more often that that
 /**
- * The cache Time-To-Live, in milliseconds
+ * The cache Time-To-Live, in milliseconds. To set the TTL, use `cache.setTTL()`. Defaults to `240000`, or 4 minutes
  * @type {Number}
+ * @default 240000
  */
 cache.ttl = 4 * 60 * 1000;
 /**
- * The cache, as it stands
+ * The cache object, mainly for debugging. Use `cache.has()` or `.cache()` to manipulate. Defaults to an empty object, i.e. no cache
  * @type {Object}
+ * @default {  }
  */
 cache.current = {
 
 }
 
 /**
- * Cache results from VexDB for a specified amount of time, used to prevent unneeded requests.
+ * Set the Time-To-Live for all upcoming caches. Note that this does not affect old caches, their TTL will still be the same 
  * @method cache.setTTL
  * @param  {Number} ttl The Time-To-Live, in milliseconds. Set to 0 for no caching
  * @return {Object}     The current cache.current

@@ -16,7 +16,7 @@
 
 ## cache
 
-Caches a url to a value
+Since VexDB updates every 4 minutes, it can oftentimes be wasteful to send the same request twice in a similar timespan, default 4 minutes. Use cache to control the inner cache that this module uses
 
 **Parameters**
 
@@ -27,15 +27,15 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### ttl
 
-The cache Time-To-Live, in milliseconds
+The cache Time-To-Live, in milliseconds. To set the TTL, use `cache.setTTL()`. Defaults to `240000`, or 4 minutes
 
 ### current
 
-The cache, as it stands
+The cache object, mainly for debugging. Use `cache.has()` or `.cache()` to manipulate. Defaults to an empty object, i.e. no cache
 
 ### cache.setTTL
 
-Cache results from VexDB for a specified amount of time, used to prevent unneeded requests.
+Set the Time-To-Live for all upcoming caches. Note that this does not affect old caches, their TTL will still be the same
 
 **Parameters**
 
