@@ -2,11 +2,11 @@
 
 Install this package with:
 
-    npm install vexdb
-
-or, if you want to use yarn:
-
     yarn add vexdb
+
+or, if you want to use npm:
+
+    npm i vexdb
 
 ## Examples
 
@@ -14,12 +14,12 @@ or, if you want to use yarn:
 
     var vexdb = require("vexdb");
     vexdb.get("events", { season: "StarStruck" })
-      .then(console.log)
+      .then(console.log) // An array, of events
 
 [`.size()`](https://github.com/MayorMonty/vexdb/blob/master/API.md#size)
 
     vexdb.size("teams", { region: "California" })
-      .then(console.log)
+      .then(console.log) // A Number, like 65
 
 [`.configure()`](https://github.com/MayorMonty/vexdb/blob/master/API.md#configure)
 
@@ -36,8 +36,20 @@ or, if you want to use yarn:
 [`.getAll()`](https://github.com/MayorMonty/vexdb/blob/master/API.md#getAll)
 
     var vexdb = require("vexdb");
-    vexdb.getAll("events", { season: "StarStruck" })
-      .then(console.log)
+    vexdb.getAll("events")
+      .then(console.log) // [...5000+ events]
 
-## API
+## Caching
+Since VexDB only updates every 4 minutes, this module will prevent repeat requests by resolving them with the previous value immediately. You can control this behavior with `vexdb.cache`
+
+### Update the Time To Live for new caches
+
+    vexdb.cache.setTTL(60 * 1000);
+
+### See if a cache is present, and get it
+
+    vexdb.cache.has("/get_events?season=StarStruck")
+
+
+## Documentation
 See [API.md](https://github.com/MayorMonty/vexdb/blob/master/API.md)
