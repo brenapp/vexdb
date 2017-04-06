@@ -1,31 +1,31 @@
 {
-  "name": "vexdb",
-  "version": "0.2.8",
-  "description": "A simple tool for accessing the VexDB",
-  "main": "main.js",
-  "scripts": {
-    "test": "ava"
-  },
-  "repository": "git+https://github.com/MayorMonty/vexdb.git",
-  "keywords": [
-    "vexdb",
-    "vrc",
-    "vex",
-    "robotics",
-    "database",
-    "rest",
-    "api"
-  ],
-  "author": "Brendan McGuire",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/MayorMonty/vexdb/issues"
-  },
-  "homepage": "https://github.com/MayorMonty/vexdb#readme",
-  "dependencies": {
-    "axios": "^0.15.3"
-  },
-  "devDependencies": {
-    "ava": "^0.18.2"
-  }
+    "name": "vexdb",
+    "version": "0.3.8",
+    "description": "A simple tool for accessing the VexDB",
+    "main": "main.js",
+    "scripts": {
+        "test": "ava"
+    },
+    "repository": "git+https://github.com/MayorMonty/vexdb.git",
+    "keywords": [
+        "vexdb",
+        "vrc",
+        "vex",
+        "robotics",
+        "database",
+        "rest",
+        "api"
+    ],
+    "author": "Brendan McGuire",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/MayorMonty/vexdb/issues"
+    },
+    "homepage": "https://github.com/MayorMonty/vexdb#readme",
+    "dependencies": {
+        "axios": "^0.15.3"
+    },
+    "devDependencies": {
+        "ava": "^0.18.2"
+    }
 }

@@ -2,11 +2,62 @@
 
 ### Table of Contents
 
+-   [cache](#cache)
+    -   [ttl](#ttl)
+    -   [current](#current)
+    -   [cache.setTTL](#cachesetttl)
+    -   [clear](#clear)
+    -   [cache.has](#cachehas)
 -   [configure](#configure)
 -   [request](#request)
 -   [get](#get)
 -   [getAll](#getall)
 -   [size](#size)
+
+## cache
+
+Caches a url to a value
+
+**Parameters**
+
+-   `url` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The URL to cache for
+-   `value` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** The object to cache for that URL
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** The cache for that URL
+
+### ttl
+
+The cache Time-To-Live, in milliseconds
+
+### current
+
+The cache, as it stands
+
+### cache.setTTL
+
+Cache results from VexDB for a specified amount of time, used to prevent unneeded requests.
+
+**Parameters**
+
+-   `ttl` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** The Time-To-Live, in milliseconds. Set to 0 for no caching
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** The current cache.current
+
+### clear
+
+Resets the cache, deletes all entries
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** The reset cache
+
+### cache.has
+
+Tests if a specifed query is cached
+
+**Parameters**
+
+-   `query` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The query, stored as the URL
+
+Returns **([Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) | null)** Either the cache if it is cached, or null if not
 
 ## configure
 
@@ -28,6 +79,7 @@ Makes a reqest to the vexDB API
 
 -   `endpoint` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The endpoint to request, must be events, teams, matches, rankings, season_rankings, awards, or skills
 -   `params` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Any URL parameters to specify, in Object form. See the relevant API docs page for more info
+-   `args`  
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 

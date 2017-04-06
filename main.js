@@ -1,6 +1,6 @@
 var axios = require("axios"),
     libURL = require("url"),
-    package = require("./package");
+    version = require("./package").version;
 
 
 /**
@@ -97,7 +97,7 @@ var globalOptions = {
   },
   "headers": {
     // Set a descriptive User-Agent as a default
-    "User-Agent": `vexdb/${package.version} (Node.js like JavaScript) <https://npm.im/vexdb>`
+    "User-Agent": `vexdb/${version} (Node.js like JavaScript) <https://npm.im/vexdb>`
   }
 }
 
