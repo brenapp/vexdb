@@ -15,7 +15,8 @@ var globalOptions = {
 
   },
   "headers": {
-
+    // Set a descriptive User-Agent as a default
+    "User-Agent": `vexdb/${package.version} (Node.js like JavaScript) <https://npm.im/vexdb>`
   }
 }
 
