@@ -1,12 +1,93 @@
 var axios = require("axios"),
-    libURL = require("url");
+    libURL = require("url"),
+    package = require("./package");
 
+
+/**
+ * Caches a url to a value
+ * @method cache
+ * @param  {String} url   The URL to cache for
+ * @param  {Object} value The object to cache for that URL
+ * @return {Object}       The cache for that URL
+ */
+function cache(url, value) {
+  let expiry = Date.now() + cache.ttl;
+  return cache.current[url] = {
+    expiry,
+    value
+  }
+}
+
+// VexDB updates every 4 minutes, you don't need to repeat requests more often that that
+/**
+ * The cache Time-To-Live, in milliseconds
+ * @type {Number}
+ */
+cache.ttl = 4 * 60 * 1000;
+/**
+ * The cache, as it stands
+ * @type {Object}
+ */
+cache.current = {
+
+}
+
+/**
+ * Cache results from VexDB for a specified amount of time, used to prevent unneeded requests.
+ * @method cache.setTTL
+ * @param  {Number} ttl The Time-To-Live, in milliseconds. Set to 0 for no caching
+ * @return {Object}     The current cache.current
+ */
+cache.setTTL = function setTTL(ttl) {
+  cache.ttl = ttl;
+  return cache.current;
+}
+
+/**
+ * Resets the cache, deletes all entries
+ * @method clear
+ * @return {Object} The reset cache
+ */
+cache.clear = function clear() {
+  return cache.current = {};
+}
+
+/**
+ * Tests if a specifed query is cached
+ * @method cache.has
+ * @param  {String} query The query, stored as the URL
+ * @return {Object|null}       Either the cache if it is cached, or null if not
+ */
+cache.has = function has(query) {
+  let cutoff = Date.now() + cache.ttl;
+  if (cache.current[query] && cache.current[query].expiry < cutoff) {
+    return cache.current[query];
+  } else {
+    // If it's expired, delete it
+    delete cache.current[query];
+    return null;
+  }
+}
 
 // Super simple debug function, really useful for promises
 function debug(value) {
   console.log(value);
   return value[0];
 }
+
+// Serialize a URL according to its params
+function serialize(url, params) {
+  let str = "";
+  for (var p in params) {
+    if (params.hasOwnProperty(p)) {
+      if (str !== "") str += "&"
+      str += `${p}=${encodeURIComponent(params[p])}`
+    }
+  }
+
+  return `${url}?${str}`
+}
+
 
 axios.defaults.baseURL = "https://api.vexdb.io/v1/";
 
@@ -58,7 +139,7 @@ function configure(changes) {
  * @param  {Object} params   Any URL parameters to specify, in Object form. See the relevant API docs page for more info
  * @return {Promise}
  */
-function request (endpoint, params) {
+function request (endpoint, args) {
 
   // Validate endpoint against known, to avoid unneeded requests
   let known = [
@@ -79,10 +160,16 @@ function request (endpoint, params) {
   let url = `/get_${endpoint}`,
       output = "";
 
-  return axios.get(url, {
-    headers: globalOptions.headers,
-    params: Object.assign({}, globalOptions.defaultParams, params)
-  }).then(res => res.data.status ? res.data : Promise.reject(new Error(res.data.error_text)))
+  let res = cache.has(url);
+  let params = Object.assign({}, globalOptions.defaultParams, args);
+  if (res) {
+    return Promise.resolve(res.value)
+  } else {
+    return axios.get(url, {
+      headers: globalOptions.headers,
+      params
+    }).then(res => res.data.status ? cache(serialize(url, params), res.data).value : Promise.reject(new Error(res.data.error_text)))
+  }
 }
 
 /**
@@ -133,5 +220,6 @@ module.exports = {
   get,
   getAll,
   size,
-  configure
+  configure,
+  cache
 }
