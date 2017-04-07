@@ -4,7 +4,7 @@
     "description": "A simple tool for accessing the VexDB",
     "main": "main.js",
     "scripts": {
-        "test": "nyc ava && codecov"
+        "test": "nyc --reporter=lcov ava | codecov"
     },
     "repository": "git+https://github.com/MayorMonty/vexdb.git",
     "keywords": [
