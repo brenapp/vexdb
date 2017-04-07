@@ -1,5 +1,5 @@
 import test from "ava";
-import { cache } from '../main';
+import { cache, get } from '../main';
 
 
 test("Register a cache", t => {
@@ -21,6 +21,16 @@ test("Cache invalidates after TTL", async t => {
   setTimeout(function() {
     if (!cache.has("/ttl")) t.pass();
   }, 100);
+
+});
+
+test("Something already cached resolves instantly", async t => {
+
+  var start = Date.now();
+  get("events", { region: "South Carolina" })
+    .then( () =>  Date.now() - start > 100 ? null : t.fail("Resolved to quickly, is it already cached?") )
+  get("events", { region: "South Carolina" })
+    .then( () =>  Date.now() - start > 100 ? t.fail("Did not resolve fast enough, did it not cache?") : t.pass() )
 
 });
 
