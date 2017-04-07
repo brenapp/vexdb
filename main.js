@@ -70,12 +70,6 @@ cache.has = function has(query) {
   }
 }
 
-// Super simple debug function, really useful for promises
-function debug(value) {
-  console.log(value);
-  return value;
-}
-
 // Serialize a URL according to its params
 function serialize(url, params) {
   let str = "";
@@ -188,7 +182,7 @@ function getAll(endpoint, params) {
       Promise.all(
         [...Array(Math.ceil(items / 5000))]
           .map(
-            (v, i) => get(endpoint, Object.assign(params, { limit_start: 5000 * i }))
+            (v, i) => get(endpoint, Object.assign(params || {}, { limit_start: 5000 * i }))
           )
         ).then( result => result.reduce((a,b) => a.concat(b)) )
     )
