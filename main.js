@@ -73,7 +73,7 @@ cache.has = function has(query) {
 // Super simple debug function, really useful for promises
 function debug(value) {
   console.log(value);
-  return value[0];
+  return value;
 }
 
 // Serialize a URL according to its params

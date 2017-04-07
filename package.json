@@ -4,7 +4,7 @@
     "description": "A simple tool for accessing the VexDB",
     "main": "main.js",
     "scripts": {
-        "test": "ava"
+        "test": "nyc ava && codecov"
     },
     "repository": "git+https://github.com/MayorMonty/vexdb.git",
     "keywords": [
@@ -26,6 +26,8 @@
         "axios": "^0.15.3"
     },
     "devDependencies": {
-        "ava": "^0.18.2"
+        "ava": "^0.18.2",
+        "codecov": "^2.1.0",
+        "nyc": "^10.2.0"
     }
 }
