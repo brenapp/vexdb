@@ -149,10 +149,8 @@ function request (endpoint, args) {
   let res = cache.has(url);
   let params = Object.assign({}, globalOptions.defaultParams, args);
   if (res) {
-    console.log("Resolving Cache");
     return Promise.resolve(res.value)
   } else {
-    console.log("Making Request");
     return axios.get(url, {
       headers: globalOptions.headers,
       params
