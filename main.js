@@ -12,6 +12,7 @@ var axios = require("axios"),
  */
 function cache(url, value) {
   let expiry = Date.now() + cache.ttl;
+  if (value.length === 1) value = value[0];
   return cache.current[url] = {
     expiry,
     value
