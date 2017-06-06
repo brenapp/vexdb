@@ -13,6 +13,7 @@ var axios = require("axios"),
 function cache(url, value) {
   let expiry = Date.now() + cache.ttl;
   if (value.length === 1) value = value[0];
+  if(url.slice(-1) == "?") url = url.slice(0,-1)
   return cache.current[url] = {
     expiry,
     value
@@ -148,8 +149,10 @@ function request (endpoint, args) {
   let res = cache.has(url);
   let params = Object.assign({}, globalOptions.defaultParams, args);
   if (res) {
+    console.log("Resolving Cache");
     return Promise.resolve(res.value)
   } else {
+    console.log("Making Request");
     return axios.get(url, {
       headers: globalOptions.headers,
       params
