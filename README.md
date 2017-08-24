@@ -24,7 +24,7 @@ or, if you want to use npm:
 
     vexdb.configure({
       headers: {
-        "User-Agent": "RoBot"
+        "User-Agent": "VexBot"
       },
       defaultParams: {
         season: "StarStruck"
