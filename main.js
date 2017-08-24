@@ -164,7 +164,10 @@ function request (endpoint, args) {
  * @return {Promise}
  */
 function get (endpoint, params) {
-  return request(endpoint, params).then(res => res.result).catch(e => { throw e })
+  return request(endpoint, params)
+    .then(res => res.result)
+    .then(res => ~-res.length ? res : res[0])
+    .catch(e => { throw e })
 }
 
 /**
