@@ -97,7 +97,7 @@ var globalOptions = {
   }
 }
 
-if (typeof module !== "undefined" && module.exports) {
+if (!this.window) {
   globalOptions.headers = {
     // Set a descriptive User-Agent as a default
     "User-Agent": `vexdb/${version} (Node.js like JavaScript) <https://npm.im/vexdb>`
