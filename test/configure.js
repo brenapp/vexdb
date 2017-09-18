@@ -12,8 +12,7 @@ test("Register a header", t => {
     {
       "defaultParams": {},
       "headers": {
-        "a": "b",
-        "User-Agent": `vexdb/${version} (Node.js like JavaScript) <https://npm.im/vexdb>`
+        "a": "b"
       }
     }
     )
