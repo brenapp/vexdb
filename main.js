@@ -97,13 +97,6 @@ var globalOptions = {
   }
 }
 
-if (!this.window) {
-  globalOptions.headers = {
-    // Set a descriptive User-Agent as a default
-    "User-Agent": `vexdb/${version} (Node.js like JavaScript) <https://npm.im/vexdb>`
-  }
-}
-
 /**
  * Configure requests, to add things like default parameters, User Agent, etc
  * @method configure
