@@ -1,5 +1,6 @@
 import test from "ava";
-import { configure, get } from '../main';
+import { configure, get } from "../main";
+import { globalOptions } from "../lib/configure";
 import { version } from "../package"
 
 test("Register a header", t => {
@@ -13,7 +14,8 @@ test("Register a header", t => {
       "defaultParams": {},
       "headers": {
         "a": "b"
-      }
+      },
+      "settings": globalOptions.settings
     }
     )
 });

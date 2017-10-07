@@ -23,7 +23,8 @@
     },
     "homepage": "https://github.com/MayorMonty/vexdb#readme",
     "dependencies": {
-        "axios": "^0.15.3"
+        "axios": "^0.15.3",
+        "deep-equal": "^1.0.1"
     },
     "devDependencies": {
         "ava": "^0.18.2",

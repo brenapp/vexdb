@@ -1,1 +1,7 @@
 var vexdb = require("./main");
+
+var live = vexdb.live("matches", { season: "In The Zone" });
+var i = 0;
+live.on("item", function() {
+   console.log(i++);
+});
