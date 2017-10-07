@@ -8,4 +8,11 @@ install:
   - yarn global add ava
 
 script:
-  npm test
+  yarn test
+
+deploy:
+  provider: npm
+  email: articialchamber@gmail.com
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
