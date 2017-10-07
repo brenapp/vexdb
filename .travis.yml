@@ -14,5 +14,4 @@ deploy:
   provider: npm
   email: articialchamber@gmail.com
   api_key: $NPM_TOKEN
-  on:
-    tags: true
+  on: deploy-npm-release
