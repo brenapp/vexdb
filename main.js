@@ -3,17 +3,19 @@
  * vexdb - An API wrapper for VexDB (https://vexdb.io)
  * Copyright (c) 2017 Brendan McGuire. See LICENSE file for details (MIT LICENSE)
  * 
- * Features of vexdb!
+ * Special thanks to Nathan Allen for providing an excellent service!
+ * 
+ * Features of vexdb:
  *  - Complete Cache Control
+ *  - Useful abstractions
  *  - Promises
  *  - Isometric
- *  - Live Subscriptions
  */
 
 const cache = require("./lib/cache");
 const { request, get, getAll, size } = require("./lib/request");
 const { configure, globalOptions } = require("./lib/configure");
-const live = require("./lib/live");
+const util = require("./lib/util");
 
 module.exports = {
   request,
@@ -22,5 +24,5 @@ module.exports = {
   size,
   configure,
   cache,
-  live
+  util
 }
