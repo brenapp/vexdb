@@ -10,6 +10,8 @@ install:
 script:
   yarn test
 
+after_success:
+  yarn publish
 
 branches:
   only:
