@@ -10,9 +10,6 @@ install:
 script:
   yarn test
 
-after_success:
-  yarn publish
-
 branches:
   only:
     - master 
@@ -20,4 +17,3 @@ branches:
     provider: npm
     email: articialchamber@gmail.com
     api_key: $NPM_TOKEN
-    on: deploy-npm-release
