@@ -10,12 +10,9 @@ install:
 script:
   yarn test
 
-branches:
-  only:
-    - master 
-  deploy:
-    provider: npm
-    email: articialchamber@gmail.com
-    api_key: $NPM_TOKEN
-    on:
-      tags: true
+deploy:
+  provider: npm
+  email: articialchamber@gmail.com
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
