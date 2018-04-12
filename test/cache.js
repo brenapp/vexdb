@@ -2,9 +2,9 @@ import test from "ava";
 import { cache, get, size } from '../main';
 
 
-test("Register a cache", async t => {
-  await get("teams", { team: "3796B" });
-  cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail()
+test("Register a cache", t => {
+  get("teams", { team: "3796B" })
+    .then(() => cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
 });
 
 test("TTL propagates", t => {
