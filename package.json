@@ -6,6 +6,9 @@
     "scripts": {
         "test": "nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
     },
+    "engines": {
+        "node": ">=8.6.0"
+    },
     "repository": "git+https://github.com/MayorMonty/vexdb.git",
     "keywords": [
         "vexdb",
