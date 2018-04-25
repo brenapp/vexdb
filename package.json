@@ -26,7 +26,7 @@
     },
     "homepage": "https://github.com/MayorMonty/vexdb#readme",
     "dependencies": {
-        "axios": "^0.15.3"
+        "isomorphic-fetch": "^2.2.1"
     },
     "devDependencies": {
         "ava": "^0.18.2",
