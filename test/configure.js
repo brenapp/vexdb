@@ -1,31 +1,21 @@
 import test from "ava";
-import { configure, get } from "../main";
-import { globalOptions } from "../lib/configure";
+import constants from "../lib/constants";
+import { size } from "../main";
 import { version } from "../package"
 
 test("Register a header", t => {
-  t.deepEqual(
-    configure(
-      {
-        "headers": { "a": "b" }
-      }
-    ),
-    {
-      "defaultParams": {},
-      "headers": {
-        "a": "b"
-      },
-      "settings": globalOptions.settings
-    }
-    )
-});
+  constants.header({
+    "Accept": "application/json"
+  });  
+  t.deepEqual(constants.settings.headers, { 
+    "User-Agent": "vexdb (nodejs)",
+    "Accept": "application/json" 
+  })
+})
 
 test("Register a default parameter", async t => {
-  configure({
-    "defaultParams": {
-      "season": "333BH3BH3DIJDJNDHBDJBDIJENJ J"
-    }
+  constants.param({
+    season: "Nothing But Net"
   })
-  let res = await get("events");
-  t.is(res.length, 0)
+  t.is(await size("events"), 1044);
 });
