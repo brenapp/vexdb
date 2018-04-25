@@ -13,16 +13,12 @@
  */
 
 const cache = require("./lib/cache");
-const { request, get, getAll, size } = require("./lib/request");
-const { configure, globalOptions } = require("./lib/configure");
-const util = require("./lib/util");
+const constant = require("./lib/constants");
+const { get, size } = require("./lib/request");
 
 module.exports = {
-  request,
-  get,
-  getAll,
-  size,
-  configure,
   cache,
-  util
+  constant,
+  get,
+  size
 }
