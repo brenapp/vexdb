@@ -13,3 +13,14 @@ test(".get() rejects for incorrect endpoints", async t => {
     t.pass()
   }
 });
+
+test(".get() with post-request filters", async t => {
+    await get("teams", {
+      region: ["South Carolina", "North Carolina"],
+      name: /\[TVA\].+/g,
+      city: (city, item) => !~city.indexOf("e"),
+      grade: ["High School", "Middle School"],
+      number: "3796B"
+    }).then(t.pass)
+      .catch(t.fail)
+})
