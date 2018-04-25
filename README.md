@@ -21,7 +21,7 @@ or, if you want to use npm:
 
 ## API Primer
 
-[`vexdb.get()`](https://github.com/MayorMonty/vexdb/blob/master/API.md#get)
+### GET
 
 Retrieves data from an endpoint with the specified parameters. These parameters can include any that can be specified to VexDB, as well as final values in the response object. Parameters can be Strings, RegExps, Arrays, or Functions. 
 
@@ -62,7 +62,7 @@ Retrieves data from an endpoint with the specified parameters. These parameters 
     })
 
 
-[`vexdb.size()`](https://github.com/MayorMonty/vexdb/blob/master/API.md#size)
+### Size
 
 This works basically identically to `.get()`, but returns the number of items that fit this result.
 
@@ -70,7 +70,7 @@ This works basically identically to `.get()`, but returns the number of items th
     vexdb.size("teams", { region: "California" })
       .then(console.log) 
 
-## Defaults
+### Defaults
 In many cases, you'll want to share headers and parameters across requests. This can be done using `vexdb.constants.header` and `vexdb.constants.param`, respectively:
 
     vexdb.constants.param({
@@ -83,16 +83,16 @@ In many cases, you'll want to share headers and parameters across requests. This
 
 
 
-## Caching
+### Caching
 Since VexDB only updates every 4 minutes, this module will prevent repeat requests by resolving them with the previous value immediately. You can control this behavior with `vexdb.cache`
 
 *Note: On the browser, caching will take place in `localStorage`, and in Node.js a cache file will be stored in a temporary file, which can be configured with `vexdb.constants.settings.cache.file`*
 
-### Update the Time To Live for new caches
+#### Update the Time To Live for new caches
 
     vexdb.cache.setTTL(60 * 1000);
 
-### See if a cache is present, and get it
+#### See if a cache is present, and get it
 
     vexdb.cache.has("/get_events?season=StarStruck")
 
