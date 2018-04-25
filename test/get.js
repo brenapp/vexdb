@@ -21,6 +21,5 @@ test(".get() with post-request filters", async t => {
       city: (city, item) => !~city.indexOf("e"),
       grade: ["High School", "Middle School"],
       number: "3796B"
-    }).then(t.pass)
-      .catch(t.fail)
+    }).then(() => t.pass())
 })
