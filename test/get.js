@@ -21,5 +21,12 @@ test(".get() with post-request filters", async t => {
       city: (city, item) => !~city.indexOf("e"),
       grade: ["High School", "Middle School"],
       number: "3796B"
-    }).then(() => t.pass())
+    }).catch(() => t.fail());
+
+    await get("skills", {
+      attempts: [2, 3, 4],
+      team: ["3796A", "3796B", "3796C"]
+    }).catch(() => t.fail());
+
+    t.pass();
 })
