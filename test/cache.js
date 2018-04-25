@@ -1,5 +1,6 @@
 import test from "ava";
-import { cache, get, size } from '../main';
+import { cache, get, size } from "../main";
+import { settings } from "../lib/constants";
 
 
 test("Register a cache", t => {
@@ -13,9 +14,11 @@ test("TTL propagates", t => {
 });
 
 test("Cache invalidates after TTL", async t => {
-  // Set the TTL super short, so we don't have to bother with waiting
+  // Set the TTL super short, so we don"t have to bother with waiting
   cache.setTTL(100);
-  cache("teams", { very: 'little' }, { pass: true });
+  cache("teams", {
+    very: 'little'
+  }, { pass: true });
   setTimeout(function () {
     if (!cache.has("teams", { very: 'little' })) t.pass();
   }, 100);
@@ -32,9 +35,36 @@ test("Something already cached resolves instantly", async t => {
 
 });
 
+test("In browser, cache uses localStorage", async t => {
+  global.window = this; // Trick the module
+  global.localStorage = {};
+  get("teams", { team: "3796B" })
+    .then(() => cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
+});
+
+test("Rejects on invalid file", async t => {
+  try {
+    settings.cache.file = () => "Failure";
+    get("teams", { team: "3796B" })
+  } catch (e) {
+    t.pass();
+  }
+});
+
+test("Cache file defaults correctly", t => {
+  return t.is(settings.cache.file, require("path").join(require("os").tmpdir(), "vexdb.json"));
+})
 
 // Reset the cache
 test.afterEach.always(t => {
+  settings.cache.file = require("path").join(require("os").tmpdir(), "vexdb.json");
   cache.clear();
+  cache.save();
   cache.setTTL(4 * 60 * 1000);
+  delete global.window;
+  delete global.localStorage;
 });
+
+test.beforeEach(t => {
+  settings.cache.file = require("path").join(require("os").tmpdir(), "vexdb.json");
+})
