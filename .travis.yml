@@ -8,7 +8,6 @@ install:
   - yarn global add ava
 
 before_script:
-  - rm /tmp/vexdb.json
   - echo "{}" >> /tmp/vexdb.json
 
 script:
