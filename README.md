@@ -5,9 +5,9 @@
 ## Features
  - Promise Based
  - Isomorphic: Works both in the browser and in Node.js
- - [Simple, but powerful filtering](###GET)
- - [Smart cache](###Caching)
- - [Live API](###Live)
+ - [Simple, but powerful filtering](#get)
+ - [Smart cache](#caching)
+ - [Live API](#live)
 
 ## Installation
 
