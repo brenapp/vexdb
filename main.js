@@ -15,10 +15,12 @@
 const cache = require("./lib/cache");
 const constant = require("./lib/constants");
 const { get, size } = require("./lib/request");
+const live = require("./lib/live");
 
 module.exports = {
   cache,
   constant,
   get,
-  size
+  size,
+  live
 }

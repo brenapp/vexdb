@@ -3,11 +3,11 @@
 `vexdb` is a wrapper for [VexDB](https://vexdb.io).
 
 ## Features
- - Promise-based requests
- - Isometric, works in both Node and the Browser
- - Provides powerful filtering options not easily available in normal requests
- - Makes extra requests to account for VexDB's 5000 item response limit
- - Handles caching to avoid uneeded requests
+ - Promise Based
+ - Isomorphic: Works both in the browser and in Node.js
+ - [Simple, but powerful filtering](###GET)
+ - [Smart cache](###Caching)
+ - [Live API](###Live)
 
 ## Installation
 
@@ -88,15 +88,26 @@ Since VexDB only updates every 4 minutes, this module will prevent repeat reques
 
 *Note: On the browser, caching will take place in `localStorage`, and in Node.js a cache file will be stored in a temporary file, which can be configured with `vexdb.constants.settings.cache.file`*
 
-#### Update the Time To Live for new caches
+**Update the Time To Live for new caches**
 
     vexdb.cache.setTTL(60 * 1000);
 
-#### See if a cache is present, and get it
+**See if a cache is present, and get it**
 
     vexdb.cache.has("teams", {
         region: "South Carolina"
     })
+
+### Live
+VexDB also supports basic live features. Specify an endpoint and parameters (passed through to `get()`) and recieve updates on new items that fit that criteria
+
+    vexdb.live("matches", {
+        scored: 1,
+        sku: "RE-VRC-17-3805"
+    }).on("item", console.log)
+
+*Note that the `item` event will trigger for every result on the inital poll. This means that every item that fits the parameters will be passed to `item`*
+
 
 
 ## Documentation
