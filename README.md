@@ -71,6 +71,9 @@ This works basically identically to `.get()`, but returns the number of items th
 // Get the number of all teams in California
 vexdb.size("teams", { region: "California" })
     .then(console.log) 
+
+// All examples from .get() above would work here...
+
 ```
 > Depending on the parameters specified, `size()` may or may not send `nodata` requests. In order to minimize bandwidth, you'll want to only include parameters that can be passed directly to VexDB
 
@@ -103,7 +106,7 @@ vexdb.cache.has("teams", {
 })
 ```
 ### Live
-VexDB also supports basic live features. Specify an endpoint and parameters (passed through to `get()`) and recieve updates on new items that fit that criteria
+This module also supports basic live features. Specify an endpoint and parameters (passed through to `get()`) and recieve updates on new items that fit that criteria
 ```javascript
 vexdb.live("matches", {
     scored: 1,
