@@ -61,6 +61,8 @@ Retrieves data from an endpoint with the specified parameters. These parameters 
             })) > 0
     })
 
+> **Warning**: Certain endpoints describe a team's number as `team`, while others refer to it as `number` (namely the `teams` endpoint). Only use `number` when specifying using the `teams` endpoint, and only when passing strings or an array of strings. 
+
 
 ### Size
 
@@ -69,6 +71,8 @@ This works basically identically to `.get()`, but returns the number of items th
     // Get the number of all teams in California
     vexdb.size("teams", { region: "California" })
       .then(console.log) 
+
+> Depending on the parameters specified, `size()` may or may not send `nodata` requests. In order to minimize bandwidth, you'll want to only include parameters that can be passed directly to VexDB
 
 ### Defaults
 In many cases, you'll want to share headers and parameters across requests. This can be done using `vexdb.constants.header` and `vexdb.constants.param`, respectively:
