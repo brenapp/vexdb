@@ -94,7 +94,9 @@ Since VexDB only updates every 4 minutes, this module will prevent repeat reques
 
 #### See if a cache is present, and get it
 
-    vexdb.cache.has("/get_events?season=StarStruck")
+    vexdb.cache.has("teams", {
+        region: "South Carolina"
+    })
 
 
 ## Documentation
