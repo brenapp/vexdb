@@ -124,21 +124,24 @@ vexdb.live("matches", {
 }).on("item", console.log)
 ```
 **Events**
-`fetch`
 
-Emitted when a fetch has been completed
+`fetch`
 - `newItems Object[]`
 
-`prefetch`
+Emitted on a successful fetch
 
-Emitted when a prefetch has been completed
+`prefetch`
 - `results Object[]`
 
+Emitted when a prefetch has been completed
+
+
 `item`
-Emitted for each new item
 - `item Object`
+Emitted for each new item
 
 `close`
+
 Emitted for each new item
 
 **API**
