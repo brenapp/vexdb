@@ -15,24 +15,6 @@ test(".live() returns an EventEmitter", t => {
     }) instanceof EventEmitter ? t.pass() : t.fail()
 });
 
-test(".live() prefetch behavior works correctly", async t => {
-    let matches = live("matches", {
-        scored: 1,
-        sku: "RE-VRC-17-3805",
-        prefetch: true
-    });
-    matches.on("prefetch", items => t.is(items.length > 0, true))
-});
-
-test(".live() prefetch event works correctly", async t => {
-    let matches = live("matches", {
-        scored: 1,
-        sku: "RE-VRC-17-3805",
-        prefetch: true
-    });
-    matches.on("prefetch", () => t.pass());
-});
-
 test(".live() does not prefetch when not told to", async t => {
     let matches = live("matches", {
         scored: 1,
@@ -59,7 +41,6 @@ test(".live() with no prefetch emits `item` the correct number of times", t => {
 });
 
 test(".live() makes no more polls after .close() is called", async t => {
-    constant.settings.live.pollTime = 1;
     let matches = live("matches", {
         scored: 1,
         sku: "RE-VRC-17-3805"
@@ -85,7 +66,7 @@ test(".live() changes parameters successfully", async t => {
 })
 
 test.afterEach.always(t => {
-    constant.settings.live.pollTime = 10 * 1000;
+    constant.settings.live.pollTime = 1;
     let interval = setInterval(() => { }, 9999);
     for (let i = 0; i < interval.length; i++) {
         clearInterval(interval[i]);
