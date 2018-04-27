@@ -152,5 +152,3 @@ Override request parameters for future requests. *Note: this does not change the
 `current(): Object[]`
 Returns the current cache of results
 
-## Documentation
-See [API.md](https://github.com/MayorMonty/vexdb/blob/master/API.md)
