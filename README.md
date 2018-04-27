@@ -125,21 +125,24 @@ vexdb.live("matches", {
 ```
 **Events**
 `fetch`
+
 Emitted when a fetch has been completed
-- `newItems` Object[]
+- `newItems Object[]`
 
 `prefetch`
+
 Emitted when a prefetch has been completed
-- `results` Object[]
+- `results Object[]`
 
 `item`
 Emitted for each new item
-- `item` Object
+- `item Object`
 
 `close`
 Emitted for each new item
 
 **API**
+
 `close(): undefined`
 Stop new polls
 
