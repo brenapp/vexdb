@@ -1,4 +1,6 @@
-## VexDB [![Build Status](https://travis-ci.org/MayorMonty/vexdb.svg?branch=master)](https://travis-ci.org/MayorMonty/vexdb) [![codecov](https://codecov.io/gh/MayorMonty/vexdb/branch/master/graph/badge.svg)](https://codecov.io/gh/MayorMonty/vexdb)
+## VexDB [![Build Status](https://travis-ci.org/MayorMonty/vexdb.svg?branch=master)](https://travis-ci.org/MayorMonty/vexdb) [![codecov](https://codecov.io/gh/MayorMonty/vexdb/branch/master/graph/badge.svg)](https://codecov.io/gh/MayorMonty/vexdb) 
+[![npm](https://img.shields.io/npm/dm/vexdb.svg)](https://npm.im/vexdb)
+
 
 `vexdb` is a wrapper for [VexDB](https://vexdb.io).
 
@@ -123,7 +125,7 @@ vexdb.live("matches", {
     prefetch: true
 }).on("item", console.log)
 ```
-### Events
+#### Events
 
 `fetch`
 - `newItems Object[]`
@@ -146,7 +148,7 @@ Emitted for each new item
 
 ---
 
-### API
+#### API
 
 `close(): undefined`
 Stop new polls
