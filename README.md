@@ -113,6 +113,7 @@ vexdb.live("matches", {
     sku: "RE-VRC-17-3805"
 }).on("item", console.log)
 ```
+
 *Note that the `item` event will trigger for every result on the inital poll. This means that every item that fits the parameters will be passed to `item`. If you do not want this to be the case, specify `prefetch: true` in your listed parameters*
 ```javascript
 // Only new matches will trigger item
@@ -122,5 +123,31 @@ vexdb.live("matches", {
     prefetch: true
 }).on("item", console.log)
 ```
+**Events**
+`fetch`
+Emitted when a fetch has been completed
+- `newItems` Object[]
+
+`prefetch`
+Emitted when a prefetch has been completed
+- `results` Object[]
+
+`item`
+Emitted for each new item
+- `item` Object
+
+`close`
+Emitted for each new item
+
+**API**
+`close(): undefined`
+Stop new polls
+
+`params(newParams: Object): Object`
+Override request parameters for future requests. *Note: this does not change the current index of results*
+
+`current(): Object[]`
+Returns the current cache of results
+
 ## Documentation
 See [API.md](https://github.com/MayorMonty/vexdb/blob/master/API.md)
