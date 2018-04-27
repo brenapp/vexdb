@@ -130,34 +130,31 @@ vexdb.live("matches", {
 
 Emitted on a successful fetch
 
----
 `prefetch`
 - `results Object[]`
 
 Emitted when a prefetch has been completed
 
----
 `item`
 - `item Object`
 
 Emitted for each new item
 
----
 `close`
 
 Emitted for each new item
+
+---
 
 ### API
 
 `close(): undefined`
 Stop new polls
 
-----
 
 `params(newParams: Object): Object`
 Override request parameters for future requests. *Note: this does not change the current index of results*
 
-----
 
 `current(): Object[]`
 Returns the current cache of results
