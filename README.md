@@ -123,7 +123,7 @@ vexdb.live("matches", {
     prefetch: true
 }).on("item", console.log)
 ```
-**Events**
+### Events
 
 `fetch`
 - `newItems Object[]`
@@ -147,7 +147,7 @@ Emitted for each new item
 
 Emitted for each new item
 
-**API**
+### API
 
 `close(): undefined`
 Stop new polls
