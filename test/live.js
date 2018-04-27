@@ -24,6 +24,15 @@ test(".live() prefetch behavior works correctly", async t => {
     matches.on("prefetch", items => t.is(items.length > 0, true))
 });
 
+test(".live() prefetch event works correctly", async t => {
+    let matches = live("matches", {
+        scored: 1,
+        sku: "RE-VRC-17-3805",
+        prefetch: true
+    });
+    matches.on("prefetch", () => t.pass());
+});
+
 test(".live() does not prefetch when not told to", async t => {
     let matches = live("matches", {
         scored: 1,
