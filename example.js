@@ -19,8 +19,18 @@ vexdb.get("events", {
 vexdb.size("events", { season: "Nothing But Net" })
     .then(console.log)
 
-let i = 0;
-vexdb.get("teams", {
-    country: ["China", "United States"],
-    pick: (pick, team) => Math.random() > 0.5 && i++ < 500
+vexdb.get("matches", {
+    sku: "RE-VRC-17-3805",
+    team: (async region =>
+        (await vexdb.get("teams", { region, sku: "RE-VRC-17-3805" }))
+            .map(team => team.number)
+    )("South Carolina")
+}).then(console.log)og)
+
+vexdb.get("matches", {
+    sku: "RE-VRC-17-3805",
+    team: (async region =>
+        (await vexdb.get("teams", { region, sku: "RE-VRC-17-3805" }))
+            .map(team => team.number)
+    )("South Carolina")
 }).then(console.log)
