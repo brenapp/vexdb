@@ -1,5 +1,5 @@
-## VexDB [![Build Status](https://travis-ci.org/MayorMonty/vexdb.svg?branch=master)](https://travis-ci.org/MayorMonty/vexdb) [![codecov](https://codecov.io/gh/MayorMonty/vexdb/branch/master/graph/badge.svg)](https://codecov.io/gh/MayorMonty/vexdb) 
-[![npm](https://img.shields.io/npm/dm/vexdb.svg)](https://npm.im/vexdb)
+## VexDB 
+[![Build Status](https://travis-ci.org/MayorMonty/vexdb.svg?branch=master)](https://travis-ci.org/MayorMonty/vexdb) [![codecov](https://codecov.io/gh/MayorMonty/vexdb/branch/master/graph/badge.svg)](https://codecov.io/gh/MayorMonty/vexdb) [![npm](https://img.shields.io/npm/dm/vexdb.svg)](https://npm.im/vexdb)
 
 
 `vexdb` is a wrapper for [VexDB](https://vexdb.io).
