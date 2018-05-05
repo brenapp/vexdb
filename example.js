@@ -25,7 +25,7 @@ vexdb.get("matches", {
         (await vexdb.get("teams", { region, sku: "RE-VRC-17-3805" }))
             .map(team => team.number)
     )("South Carolina")
-}).then(console.log)og)
+}).then(console.log)
 
 vexdb.get("matches", {
     sku: "RE-VRC-17-3805",
