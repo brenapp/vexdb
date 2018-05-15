@@ -96,18 +96,31 @@ vexdb.constants.header({
 ### Caching
 Since VexDB only updates every 4 minutes, this module will prevent repeat requests by resolving them with the previous value immediately. You can control this behavior with `vexdb.cache`
 
-*Note: On the browser, caching will take place in `localStorage`, and in Node.js a cache file will be stored in a temporary file, which can be configured with `vexdb.constants.settings.cache.file`*
+*Note: `vexdb` uses my own [`keya`](https://npm.im/keya) module to handle cache. In Node, caching will take place in the filesystem, while in the browser, caches will be stored first in IndexedDB, then in localStorage*
 
 **Update the Time To Live for new caches**
 ```javascript
 vexdb.cache.setTTL(60 * 1000);
 ```
-**See if a cache is present, and get it**
+**See if a cache is present**
 ```javascript
 vexdb.cache.has("teams", {
     region: "South Carolina"
-})
+}).then(console.log) // Boolean
+
 ```
+**Directly resolve a cached value**
+```javascript
+vexdb.cache.resolve("skills", { region: "Utah" })
+    .then(console.log); // The resolved value, or undefined if the cache isn't present
+```
+
+**Clear the cache**
+```javascript
+vexdb.cache.clear().then(() => console.log("Cache has been cleared"))
+```
+
+
 ### Live
 This module also supports basic live features. Specify an endpoint and parameters (passed through to `get()`) and recieve updates on new items that fit that criteria
 ```javascript

@@ -3,9 +3,9 @@ import { cache, get, size } from "../main";
 import { settings } from "../lib/constants";
 
 
-test("Register a cache", t => {
+test("Register a cache", async t => {
   get("teams", { team: "3796B" })
-    .then(() => cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
+    .then(() => await cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
 });
 
 test("TTL propagates", t => {
@@ -19,8 +19,8 @@ test("Cache invalidates after TTL", async t => {
   cache("teams", {
     very: 'little'
   }, { pass: true });
-  setTimeout(function () {
-    if (!cache.has("teams", { very: 'little' })) t.pass();
+  setTimeout(async function () {
+    if (!await cache.has("teams", { very: 'little' })) t.pass();
   }, 100);
 
 });
@@ -39,7 +39,7 @@ test("In browser, cache uses localStorage", async t => {
   global.window = this; // Trick the module
   global.localStorage = {};
   get("teams", { team: "3796B" })
-    .then(() => cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
+    .then(() => await cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
 });
 
 test("Rejects on invalid file", async t => {
