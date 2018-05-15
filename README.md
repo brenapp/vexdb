@@ -91,6 +91,7 @@ vexdb.constants.header({
 })
 ```
 
+> **Warning**: Because of the Cross Origin Policy, setting headers using `vexdb.constants.header` may cause the browser to automatically block requests to `https://api.vexdb.io`. It is not reccomended to use headers in the browser.
 
 ### Caching
 Since VexDB only updates every 4 minutes, this module will prevent repeat requests by resolving them with the previous value immediately. You can control this behavior with `vexdb.cache`
