@@ -4,8 +4,8 @@ import { settings } from "../lib/constants";
 
 
 test("Register a cache", async t => {
-  get("teams", { team: "3796B" })
-    .then(() => await cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
+  await get("teams", { team: "3796B" });
+  t.is(await cache.has("teams", { team: "3796B" }), true)
 });
 
 test("TTL propagates", t => {
@@ -35,36 +35,12 @@ test("Something already cached resolves instantly", async t => {
 
 });
 
-test("In browser, cache uses localStorage", async t => {
-  global.window = this; // Trick the module
-  global.localStorage = {};
-  get("teams", { team: "3796B" })
-    .then(() => await cache.has("teams", { team: "3796B" }) ? t.pass() : t.fail())
-});
-
-test("Rejects on invalid file", async t => {
-  try {
-    settings.cache.file = () => "Failure";
-    get("teams", { team: "3796B" })
-  } catch (e) {
-    t.pass();
-  }
-});
-
-test("Cache file defaults correctly", t => {
-  return t.is(settings.cache.file, require("path").join(require("os").tmpdir(), "vexdb.json"));
-})
 
 // Reset the cache
-test.afterEach.always(t => {
-  settings.cache.file = require("path").join(require("os").tmpdir(), "vexdb.json");
-  cache.clear();
-  cache.save();
+test.afterEach.always(async t => {
+
+  await cache.clear();
   cache.setTTL(4 * 60 * 1000);
   delete global.window;
   delete global.localStorage;
 });
-
-test.beforeEach(t => {
-  settings.cache.file = require("path").join(require("os").tmpdir(), "vexdb.json");
-})
