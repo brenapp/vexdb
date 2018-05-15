@@ -1746,9 +1746,9 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.3.6"
 
-keya@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/keya/-/keya-0.0.0.tgz#80d2e6f79b82472a40e4e2cff21074f980fbf47f"
+keya@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/keya/-/keya-0.0.5.tgz#704bfc76bf37a72c2b4c81b01e1070dc9f1e01ef"
 
 kind-of@^3.0.2:
   version "3.1.0"
