@@ -1,37 +1,37 @@
 {
-    "name": "vexdb",
-    "version": "1.3.3",
-    "description": "A simple tool for accessing the VexDB",
-    "main": "main.js",
-    "scripts": {
-        "test": "nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
-    },
-    "engines": {
-        "node": ">=8.6.0"
-    },
-    "repository": "git+https://github.com/MayorMonty/vexdb.git",
-    "keywords": [
-        "vexdb",
-        "vrc",
-        "vex",
-        "robotics",
-        "database",
-        "rest",
-        "api"
-    ],
-    "author": "Brendan McGuire",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/MayorMonty/vexdb/issues"
-    },
-    "homepage": "https://github.com/MayorMonty/vexdb#readme",
-    "dependencies": {
-        "isomorphic-fetch": "^2.2.1",
-        "keya": "^0.0.4"
-    },
-    "devDependencies": {
-        "ava": "^0.18.2",
-        "codecov": "^2.1.0",
-        "nyc": "^10.2.0"
-    }
+  "name": "vexdb",
+  "version": "1.4.0",
+  "description": "A simple tool for accessing the VexDB",
+  "main": "main.js",
+  "scripts": {
+    "test": "nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
+  },
+  "engines": {
+    "node": ">=8.6.0"
+  },
+  "repository": "git+https://github.com/MayorMonty/vexdb.git",
+  "keywords": [
+    "vexdb",
+    "vrc",
+    "vex",
+    "robotics",
+    "database",
+    "rest",
+    "api"
+  ],
+  "author": "Brendan McGuire",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MayorMonty/vexdb/issues"
+  },
+  "homepage": "https://github.com/MayorMonty/vexdb#readme",
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "keya": "^0.0.4"
+  },
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "codecov": "^2.1.0",
+    "nyc": "^10.2.0"
+  }
 }
