@@ -4,14 +4,21 @@
   "description": "A simple tool for accessing the VexDB",
   "main": "main.js",
   "scripts": {
-    "test":
-      "nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "test": "nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "engines": {
     "node": ">=8.6.0"
   },
   "repository": "git+https://github.com/MayorMonty/vexdb.git",
-  "keywords": ["vexdb", "vrc", "vex", "robotics", "database", "rest", "api"],
+  "keywords": [
+    "vexdb",
+    "vrc",
+    "vex",
+    "robotics",
+    "database",
+    "rest",
+    "api"
+  ],
   "author": "Brendan McGuire",
   "license": "MIT",
   "bugs": {
