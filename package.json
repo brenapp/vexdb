@@ -3,6 +3,7 @@
   "version": "1.4.0",
   "description": "A simple tool for accessing the VexDB",
   "main": "main.js",
+  "types": "vexdb.d.ts",
   "scripts": {
     "test": "nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
