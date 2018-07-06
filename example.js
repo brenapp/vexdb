@@ -38,3 +38,7 @@ vexdb
       ))("South Carolina")
   })
   .then(console.log);
+
+vexdb.get("matches", {
+  sku: ["RE-VRC-17-3805"]
+});
