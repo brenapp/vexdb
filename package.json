@@ -30,6 +30,7 @@
     "keya": "latest"
   },
   "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.34",
     "ava": "^0.18.2",
     "codecov": "^2.1.0",
     "nyc": "^10.2.0"
