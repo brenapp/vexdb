@@ -1,32 +1,57 @@
+/**
+ * Get
+ */
+
 import test from "ava";
-import { get } from '../main';
+import { get } from "../out/main";
 
-test(".get() resolves for correct requests", async t => {
-  var res = await get("events", { season: "StarStruck" });
-  if (res.length > 0) { t.pass() } else { t.fail("Did not get any results") }
+test(".get() correctly resolves for simple requests", async t => {
+  Promise.all([
+    get("events", { season: "StarStruck" }).then(
+      res => (res.length > 0 ? null : t.fail())
+    ),
+    get("teams", { region: "South Carolina" }).then(
+      res => (res.length > 0 ? null : t.fail())
+    ),
+    get("matches", { sku: "RE-VRC-17-3805" }).then(
+      res => (res.length > 0 ? null : t.fail())
+    ),
+    get("rankings", { team: "3796B" }).then(
+      res => (res.length > 0 ? null : t.fail())
+    ),
+    get("season_rankings", { team: "7447B" }).then(
+      res => (res.length > 0 ? null : t.fail())
+    ),
+    get("skills", { team: "3796B" }).then(
+      res => (res.length > 0 ? null : t.fail())
+    ),
+    get("awards", { sku: "RE-VRC-17-3805" }).then(
+      res => (res.length > 0 ? null : t.fail())
+    )
+  ]).then(() => t.pass());
 });
 
-test(".get() rejects for incorrect endpoints", async t => {
-  try {
-    await get("invalid");
-  } catch(e) {
-    t.pass()
-  }
+test(".get() correctly creates permutations for requested objects", async t => {
+  let req = await get("teams", { sku: ["RE-VRC-17-3805", "RE-VRC-16-1501"] });
+  let reference = await get("teams", { sku: "RE-VRC-17-3805" });
+
+  req.length > reference.length ? t.pass() : t.fail();
 });
 
-test(".get() with post-request filters", async t => {
-    await get("teams", {
-      region: ["South Carolina", "North Carolina"],
-      name: /\[TVA\].+/g,
-      city: (city, item) => !~city.indexOf("e"),
-      grade: ["High School", "Middle School"],
-      number: "3796B"
-    }).catch(() => t.fail());
+test(".get() correctly filters post-request", async t => {
+  let req = await get("events", {
+    region: "South Carolina",
+    loc_city: "Greenville"
+  });
+  let reference = await get("events", {
+    region: "South Carolina"
+  });
 
-    await get("skills", {
-      attempts: [2, 3, 4],
-      team: ["3796A", "3796B", "3796C"]
-    }).catch(() => t.fail());
+  req.length < reference.length ? t.pass() : t.fail();
+});
 
-    t.pass();
-})
+test(".get() correctly resolves with parameters that are present in the query but not the response", async t => {
+  let req = await get("matches", { team: "3796B" });
+
+  req.length > 0 ? t.pass() : t.fail();
+});
