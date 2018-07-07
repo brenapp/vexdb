@@ -2,9 +2,9 @@
   "name": "vexdb",
   "version": "1.7.3",
   "description": "A simple tool for accessing the VexDB",
-  "main": "main.js",
+  "main": "/out/main.js",
   "scripts": {
-    "test": "nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "test": "tsc && nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "engines": {
     "node": ">=8.6.0"
@@ -30,8 +30,12 @@
     "keya": "latest"
   },
   "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.34",
+    "@types/node": "^10.5.2",
     "ava": "^0.18.2",
     "codecov": "^2.1.0",
-    "nyc": "^10.2.0"
+    "nyc": "^10.2.0",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
   }
 }

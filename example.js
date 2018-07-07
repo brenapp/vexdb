@@ -1,4 +1,4 @@
-var vexdb = require("vexdb");
+var vexdb = require("./out/main");
 
 vexdb
   .get("teams", {
@@ -36,5 +36,15 @@ vexdb
       (await vexdb.get("teams", { region, sku: "RE-VRC-17-3805" })).map(
         team => team.number
       ))("South Carolina")
+  })
+  .then(console.log);
+
+vexdb
+  .get("matches", {
+    team: "3796B",
+    blue: (item, match) =>
+      match.blue1 === "3796B" ||
+      match.blue2 === "3796B" ||
+      match.blue3 === "3796B"
   })
   .then(console.log);
