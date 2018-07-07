@@ -14,6 +14,7 @@ var settings = {
         pollTime: 10 * 1000
     }
 };
+exports.settings = settings;
 exports.default = settings;
 if (exports.isBrowser())
     delete settings.headers["User-Agent"];
