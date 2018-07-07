@@ -46,6 +46,7 @@ var object_1 = require("../util/object");
 var request_1 = require("./request");
 var filter_1 = __importDefault(require("../util/filter"));
 function get(endpoint, params) {
+    if (params === void 0) { params = {}; }
     return __awaiter(this, void 0, void 0, function () {
         var res, keys, clientside, filterKeys;
         var _this = this;
@@ -78,6 +79,7 @@ function get(endpoint, params) {
 }
 exports.get = get;
 function size(endpoint, params) {
+    if (params === void 0) { params = {}; }
     return __awaiter(this, void 0, void 0, function () {
         var filtering;
         return __generator(this, function (_a) {

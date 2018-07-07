@@ -69,7 +69,7 @@ export default function get(
 ): Promise<SkillsResponseObject[]>;
 export async function get(
   endpoint: Endpoint,
-  params: RequestObject
+  params: RequestObject = {}
 ): Promise<ResponseObject[]> {
   // Even though we're typescript, users of the module will not be, we should manually check endpoints
   if (!endpoints.includes(endpoint))
@@ -152,7 +152,7 @@ export function size(
   endpoint: "skills",
   params: SkillsRequestObject
 ): Promise<number>;
-export async function size(endpoint: Endpoint, params: RequestObject) {
+export async function size(endpoint: Endpoint, params: RequestObject = {}) {
   // If there's client-side filtering, then we actually have to make each request, else, we can just stick nodata on everything
   const filtering = Object.keys(params).some(
     key => !validParams[endpoint].includes(key)
