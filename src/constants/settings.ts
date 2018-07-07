@@ -30,6 +30,7 @@ let settings: settings = {
   }
 };
 
+export { settings };
 export default settings;
 
 // CORS policy forbids setting headers on foreign requests, and will cause the library to fail
