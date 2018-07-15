@@ -27,55 +27,52 @@ import {
 } from "../constants/ResponseObjects";
 
 import { endpoints } from "../constants/RequestObjects";
-import settings from "../constants/settings";
+import { settings } from "../constants/settings";
 import permutations from "../util/permutations";
 import { filter, asyncArrayFilter } from "../util/object";
 import request, { requestAll, requestSize } from "./request";
 import applyFilter from "../util/filter";
 
-export default function get(
+export function get(
   endpoint: "teams",
   params: TeamsRequestObject
 ): Promise<TeamsResponseObject[]>;
 
-export default function get(
+export function get(
   endpoint: "events",
   params: EventsRequestObject
 ): Promise<EventsResponseObject[]>;
 
-export default function get(
+export function get(
   endpoint: "matches",
   params: MatchesRequestObject
 ): Promise<MatchesResponseObject[]>;
 
-export default function get(
+export function get(
   endpoint: "rankings",
   params: RankingsRequestObject
 ): Promise<RankingsResponseObject[]>;
 
-export default function get(
+export function get(
   endpoint: "season_rankings",
   params: SeasonRankingsRequestObject
 ): Promise<SeasonRankingsResponseObject[]>;
 
-export default function get(
+export function get(
   endpoint: "awards",
   params: AwardsRequestObject
 ): Promise<AwardsResponseObject[]>;
 
-export default function get(
+export function get(
   endpoint: "skills",
   params: SkillsRequestObject
 ): Promise<SkillsResponseObject[]>;
-export async function get(
-  endpoint: Endpoint,
-  params: RequestObject = {}
-): Promise<ResponseObject[]> {
+export async function get(endpoint, params = {}) {
   // Even though we're typescript, users of the module will not be, we should manually check endpoints
   if (!endpoints.includes(endpoint))
     return Promise.reject(
       new RangeError(
-        `Endpoint ${endpoint} not know. Valid endpoints are ${endpoints.join(
+        `Endpoint ${endpoint} not known. Valid endpoints are ${endpoints.join(
           ", "
         )}`
       )
@@ -152,7 +149,7 @@ export function size(
   endpoint: "skills",
   params: SkillsRequestObject
 ): Promise<number>;
-export async function size(endpoint: Endpoint, params: RequestObject = {}) {
+export async function size(endpoint, params = {}) {
   // If there's client-side filtering, then we actually have to make each request, else, we can just stick nodata on everything
   const filtering = Object.keys(params).some(
     key => !validParams[endpoint].includes(key)
