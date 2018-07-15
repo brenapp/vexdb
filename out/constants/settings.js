@@ -15,7 +15,6 @@ var settings = {
     }
 };
 exports.settings = settings;
-exports.default = settings;
 if (exports.isBrowser())
     delete settings.headers["User-Agent"];
 function header(headers) {

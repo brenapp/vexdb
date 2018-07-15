@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -38,7 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var settings_1 = __importDefault(require("../constants/settings"));
+var settings_1 = require("../constants/settings");
 var RequestObjects_1 = require("../constants/RequestObjects");
 var keya_1 = __importDefault(require("keya"));
 function serialize(url, params) {
@@ -70,7 +70,7 @@ function cache(endpoint, params, value) {
         return __generator(this, function (_a) {
             file = "vexdb-" + sanitize(endpoint, params);
             return [2, keya_1.default.set(file, {
-                    expiry: Date.now() + settings_1.default.cache.ttl,
+                    expiry: Date.now() + settings_1.settings.cache.ttl,
                     value: value
                 })];
         });
