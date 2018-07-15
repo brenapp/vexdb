@@ -4,7 +4,7 @@
 
 import "isomorphic-fetch";
 import { Endpoint } from "../constants/RequestObjects";
-import settings from "../constants/settings";
+import { settings } from "../constants/settings";
 import { cache } from "./cache";
 
 export default async function request(endpoint, params: object = {}) {
