@@ -62,6 +62,7 @@ export interface EventsRequestObject {
   status?: StringRequest;
   limit_number?: number;
   limit_start?: number;
+  team: string;
 
   key?: StringRequest;
   name?: StringRequest;
@@ -179,6 +180,7 @@ export const validParams = {
     "season",
     "city",
     "region",
+    "team",
     "country",
     "status",
     "limit_number",
