@@ -1,10 +1,12 @@
 {
   "name": "vexdb",
-  "version": "1.7.3",
+  "version": "2.0.3",
   "description": "A simple tool for accessing the VexDB",
-  "main": "/out/main.js",
+  "main": "./out/main.js",
+  "typings": "./out/main.d.ts",
   "scripts": {
-    "test": "tsc && nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "test": "tsc -d && nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "prepublish": "tsc -d"
   },
   "engines": {
     "node": ">=8.6.0"

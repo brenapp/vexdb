@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var RequestObjects_1 = require("../constants/RequestObjects");
 var RequestObjects_2 = require("../constants/RequestObjects");
-var settings_1 = __importDefault(require("../constants/settings"));
+var settings_1 = require("../constants/settings");
 var permutations_1 = __importDefault(require("../util/permutations"));
 var object_1 = require("../util/object");
 var request_1 = require("./request");
@@ -54,8 +54,8 @@ function get(endpoint, params) {
             switch (_a.label) {
                 case 0:
                     if (!RequestObjects_2.endpoints.includes(endpoint))
-                        return [2, Promise.reject(new RangeError("Endpoint " + endpoint + " not know. Valid endpoints are " + RequestObjects_2.endpoints.join(", ")))];
-                    params = Object.assign({}, settings_1.default.params, params);
+                        return [2, Promise.reject(new RangeError("Endpoint " + endpoint + " not known. Valid endpoints are " + RequestObjects_2.endpoints.join(", ")))];
+                    params = Object.assign({}, settings_1.settings.params, params);
                     return [4, Promise.all(permutations_1.default(endpoint, params).map(function (param) {
                             return request_1.requestAll(endpoint, param).then(function (res) { return res.result; });
                         }))];
@@ -89,7 +89,7 @@ function size(endpoint, params) {
                     if (!filtering) return [3, 1];
                     return [2, get(endpoint, params).then(function (res) { return res.length; })];
                 case 1: return [4, Promise.all(permutations_1.default(endpoint, params).map(function (param) {
-                        return request_1.requestSize(endpoint, Object.assign({}, settings_1.default.params, param));
+                        return request_1.requestSize(endpoint, Object.assign({}, settings_1.settings.params, param));
                     }))];
                 case 2: return [2, (_a.sent()).reduce(function (a, b) { return a + b; })];
             }

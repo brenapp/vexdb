@@ -4,7 +4,7 @@
 
 import "isomorphic-fetch";
 import { Endpoint } from "../constants/RequestObjects";
-import settings from "../constants/settings";
+import { settings } from "../constants/settings";
 import { cache } from "./cache";
 
 export default async function request(endpoint, params: object = {}) {
@@ -29,7 +29,7 @@ export default async function request(endpoint, params: object = {}) {
 
 export async function requestSize(endpoint, params) {
   return request(endpoint, Object.assign({}, params, { nodata: true })).then(
-    res => res.size
+    res => (res ? res.size : 0)
   );
 }
 

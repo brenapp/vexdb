@@ -26,7 +26,7 @@ import {
   ResponseObject
 } from "../constants/ResponseObjects";
 import { get } from "./get";
-import settings from "../constants/settings";
+import { settings } from "../constants/settings";
 
 export interface LiveEventEmitter<Q, R> extends EventEmitter {
   close(): void;
@@ -77,10 +77,7 @@ export function live(
   params: LiveRequestObject<SkillsRequestObject>
 ): LiveEventEmitter<SkillsRequestObject, SkillsResponseObject>;
 
-export function live(
-  endpoint: Endpoint,
-  params: LiveRequestObject<RequestObject>
-): LiveEventEmitter<RequestObject, ResponseObject> {
+export function live(endpoint, params: LiveRequestObject<RequestObject>) {
   let results = [],
     keys = [],
     emitter = new EventEmitter();

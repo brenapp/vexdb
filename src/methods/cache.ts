@@ -1,4 +1,4 @@
-import settings, { isBrowser } from "../constants/settings";
+import { isBrowser, settings } from "../constants/settings";
 import {
   validParams,
   Endpoint,
@@ -113,11 +113,7 @@ export function cache(
   value: SkillsResponseObject[]
 ): Promise<CacheEntry<SkillsResponseObject>>;
 
-export async function cache(
-  endpoint: Endpoint,
-  params: RequestObject,
-  value: ResponseObject[]
-): Promise<CacheEntry<ResponseObject>> {
+export async function cache(endpoint, params, value) {
   let file = "vexdb-" + sanitize(endpoint, params);
   return keya.set(file, {
     expiry: Date.now() + settings.cache.ttl,
@@ -163,7 +159,7 @@ export namespace cache {
     params: SkillsRequestObject
   ): Promise<CacheEntry<SkillsResponseObject>>;
 
-  export async function resolve(endpoint: Endpoint, params: RequestObject) {
+  export async function resolve(endpoint, params) {
     let file = "vexdb-" + sanitize(endpoint, params);
     if (await keya.has(file)) {
       let out = await keya.get(file);
@@ -214,7 +210,7 @@ export namespace cache {
     endpoint: "skills",
     params: SkillsRequestObject
   ): Promise<boolean>;
-  export async function has(endpoint, params: RequestObject) {
+  export async function has(endpoint, params) {
     return (await resolve(endpoint, params)) !== undefined;
   }
 

@@ -17,6 +17,7 @@ exports.validParams = {
         "season",
         "city",
         "region",
+        "team",
         "country",
         "status",
         "limit_number",
