@@ -29,7 +29,7 @@ export default async function request(endpoint, params: object = {}) {
 
 export async function requestSize(endpoint, params) {
   return request(endpoint, Object.assign({}, params, { nodata: true })).then(
-    res => res.size
+    res => (res ? res.size : 0)
   );
 }
 
