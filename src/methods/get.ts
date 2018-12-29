@@ -33,6 +33,10 @@ import { filter, asyncArrayFilter } from "../util/object";
 import request, { requestAll, requestSize } from "./request";
 import applyFilter from "../util/filter";
 
+function standardize(endpoint, params) {
+  filter(params, (value, key) => validParams[endpoint].includes(key));
+}
+
 export function get(
   endpoint: "teams",
   params: TeamsRequestObject
@@ -67,7 +71,12 @@ export function get(
   endpoint: "skills",
   params: SkillsRequestObject
 ): Promise<SkillsResponseObject[]>;
-export async function get(endpoint, params = {}) {
+
+export function get(
+  endpoint: string,
+  params: RequestObject
+): Promise<ResponseObject[]>;
+export async function get(endpoint, params = {}): Promise<ResponseObject[]> {
   // Even though we're typescript, users of the module will not be, we should manually check endpoints
   if (!endpoints.includes(endpoint))
     return Promise.reject(
@@ -91,7 +100,7 @@ export async function get(endpoint, params = {}) {
   // arrays. See util/permutations.ts for more information
   let res: ResponseObject[] = (await Promise.all(
     permutations(endpoint, params).map(param =>
-      requestAll(endpoint, param).then(res => res.result)
+      requestAll(endpoint, standardize(endpoint, param)).then(res => res.result)
     )
   )).reduce((a, b) => a.concat(b), []); // Flatten list of responses into one
 
@@ -104,15 +113,15 @@ export async function get(endpoint, params = {}) {
   // First, let's get all of the parameters that require client-side filtering
   let clientside = filter(
     params,
-    (value, key) => !validParams[endpoint].includes(key)
+    (value, key) => typeof value == "function" || typeof value === "object"
   );
   let filterKeys = Object.keys(clientside);
 
-  return asyncArrayFilter<ResponseObject>(res, async item =>
-    (await Promise.all(
+  return asyncArrayFilter<ResponseObject>(res, async item => {
+    return (await Promise.all(
       filterKeys.map(key => applyFilter(item, key, clientside[key]))
-    )).every(a => !!a)
-  );
+    )).every(a => !!a);
+  });
 }
 
 export function size(
@@ -149,7 +158,9 @@ export function size(
   endpoint: "skills",
   params: SkillsRequestObject
 ): Promise<number>;
-export async function size(endpoint, params = {}) {
+
+export function size(endpoint: string, params: RequestObject): Promise<number>;
+export async function size(endpoint, params = {}): Promise<number> {
   // If there's client-side filtering, then we actually have to make each request, else, we can just stick nodata on everything
   const filtering = Object.keys(params).some(
     key => !validParams[endpoint].includes(key)
