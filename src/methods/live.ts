@@ -77,6 +77,11 @@ export function live(
   params: LiveRequestObject<SkillsRequestObject>
 ): LiveEventEmitter<SkillsRequestObject, SkillsResponseObject>;
 
+export function live(
+  endpoint: string,
+  params: LiveRequestObject<RequestObject>
+): LiveEventEmitter<RequestObject, ResponseObject>;
+
 export function live(endpoint, params: LiveRequestObject<RequestObject>) {
   let results = [],
     keys = [],
