@@ -11,7 +11,7 @@
 - [Simple, but powerful filtering](#get)
 - [Smart cache](#caching)
 - [Live API](#live)
-- Complete TypeScript Definitions at `@types/vexdb`!
+- Complete TypeScript Definitions (it's written in TypeScript)
 
 ## Installation
 
