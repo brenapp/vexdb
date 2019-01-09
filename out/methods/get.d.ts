@@ -1,5 +1,5 @@
-import { TeamsRequestObject, EventsRequestObject, MatchesRequestObject, RankingsRequestObject, SeasonRankingsRequestObject, AwardsRequestObject, SkillsRequestObject } from "../constants/RequestObjects";
-import { TeamsResponseObject, EventsResponseObject, MatchesResponseObject, RankingsResponseObject, SeasonRankingsResponseObject, AwardsResponseObject, SkillsResponseObject } from "../constants/ResponseObjects";
+import { TeamsRequestObject, EventsRequestObject, MatchesRequestObject, RankingsRequestObject, SeasonRankingsRequestObject, AwardsRequestObject, SkillsRequestObject, RequestObject } from "../constants/RequestObjects";
+import { TeamsResponseObject, EventsResponseObject, MatchesResponseObject, RankingsResponseObject, SeasonRankingsResponseObject, AwardsResponseObject, SkillsResponseObject, ResponseObject } from "../constants/ResponseObjects";
 export declare function get(endpoint: "teams", params: TeamsRequestObject): Promise<TeamsResponseObject[]>;
 export declare function get(endpoint: "events", params: EventsRequestObject): Promise<EventsResponseObject[]>;
 export declare function get(endpoint: "matches", params: MatchesRequestObject): Promise<MatchesResponseObject[]>;
@@ -7,6 +7,7 @@ export declare function get(endpoint: "rankings", params: RankingsRequestObject)
 export declare function get(endpoint: "season_rankings", params: SeasonRankingsRequestObject): Promise<SeasonRankingsResponseObject[]>;
 export declare function get(endpoint: "awards", params: AwardsRequestObject): Promise<AwardsResponseObject[]>;
 export declare function get(endpoint: "skills", params: SkillsRequestObject): Promise<SkillsResponseObject[]>;
+export declare function get(endpoint: string, params: RequestObject): Promise<ResponseObject[]>;
 export declare function size(endpoint: "teams", params: TeamsRequestObject): Promise<number>;
 export declare function size(endpoint: "events", params: EventsRequestObject): Promise<number>;
 export declare function size(endpoint: "matches", params: MatchesRequestObject): Promise<number>;
@@ -14,3 +15,4 @@ export declare function size(endpoint: "rankings", params: RankingsRequestObject
 export declare function size(endpoint: "season_rankings", params: SeasonRankingsRequestObject): Promise<number>;
 export declare function size(endpoint: "awards", params: AwardsRequestObject): Promise<number>;
 export declare function size(endpoint: "skills", params: SkillsRequestObject): Promise<number>;
+export declare function size(endpoint: string, params: RequestObject): Promise<number>;
