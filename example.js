@@ -1,4 +1,4 @@
-const vexdb = require("./out/main");
+const vexdb = require("vexdb");
 
 function asyncMap(array, callbackfn) {
   return Promise.all(array.map(callbackfn));
@@ -10,6 +10,9 @@ async function asyncFilter(array, callbackfn) {
 }
 
 const STATE_SLOTS = 40;
+const REMAINING_AWARDS = 20;
+const HS_EVENTS = 5;
+const DOUBLE_QUAL_FACTOR = 0.5;
 
 (async function() {
   console.log("Getting Qualifying Events...");
@@ -80,20 +83,31 @@ const STATE_SLOTS = 40;
       Object.keys(qualifies).length} spots remaining.`
   );
 
-  const REMAINING_AWARDS = 20;
-  const HS_EVENTS = 5;
-
   console.log(
-    `There are ${REMAINING_AWARDS} remaining awards across ${HS_EVENTS} events left which qualify for state`
+    `There are ${REMAINING_AWARDS} remaining awards across ${HS_EVENTS} events left which qualify for state. Assuming ${DOUBLE_QUAL_FACTOR *
+      100}% of that is double qualifications...`
   );
 
   const SKILLS_SPOTS =
-    STATE_SLOTS - Object.keys(qualifies).length - REMAINING_AWARDS * 0.5;
+    // Remaining Spots
+    (STATE_SLOTS - Object.keys(qualifies).length) * DOUBLE_QUAL_FACTOR;
 
   // Get skills
   const skills = await vexdb
     .get("skills", { sku: events, type: 2, season_rank: true })
-    .then(skills => skills.sort((a, b) => b.score - a.score));
+    .then(skills => skills.sort((a, b) => b.score - a.score))
+    .then(skills =>
+      skills.filter(
+        score =>
+          !Object.keys(qualifies).includes(score.team) &&
+          !["6318", "8686"].includes(score.team.slice(0, -1))
+      )
+    );
 
-  console.log(skills);
+  console.log(
+    `Skills invites will be sent to the following ${SKILLS_SPOTS} teams:`
+  );
+  skills.slice(0, SKILLS_SPOTS).forEach((score, i) => {
+    console.log(`${i + 1}. ${score.team} with ${score.score}`);
+  });
 })();
