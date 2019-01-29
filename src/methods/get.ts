@@ -34,7 +34,7 @@ import request, { requestAll, requestSize } from "./request";
 import applyFilter from "../util/filter";
 
 function standardize(endpoint, params) {
-  filter(params, (value, key) => validParams[endpoint].includes(key));
+  return filter(params, (value, key) => validParams[endpoint].includes(key));
 }
 
 export function get(
