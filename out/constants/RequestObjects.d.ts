@@ -32,7 +32,7 @@ export interface EventsRequestObject {
     status?: StringRequest;
     limit_number?: number;
     limit_start?: number;
-    team: string;
+    team?: string;
     key?: StringRequest;
     name?: StringRequest;
     loc_venue?: StringRequest;
