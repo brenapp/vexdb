@@ -67,7 +67,7 @@ vexdb.get("skills", {
 })
 ```
 
-> **Warning**: Certain endpoints describe a team's number as `team`, while others refer to it as `number` (namely the `teams` endpoint). Only use `number` when specifying using the `teams` endpoint, and only when passing strings or an array of strings.
+
 
 ### Size
 
