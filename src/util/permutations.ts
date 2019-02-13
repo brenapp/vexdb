@@ -54,7 +54,7 @@ export default function permutations(
       .map(path =>
         path
           .map((t, i) => ({
-            [permutators[i]]: Object.values(params)[i][t]
+            [permutators[i]]: params[permutators[i]][t]
           }))
           .reduce((a, b) => Object.assign({}, a, b), params)
       )
