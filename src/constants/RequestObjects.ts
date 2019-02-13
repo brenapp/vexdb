@@ -35,6 +35,8 @@ export type RequestObject =
   | SkillsRequestObject;
 
 export interface TeamsRequestObject {
+  single?: boolean;
+
   team?: StringRequest;
   number?: StringRequest;
   team_name?: StringRequest;
@@ -52,6 +54,8 @@ export interface TeamsRequestObject {
 }
 
 export interface EventsRequestObject {
+  single?: boolean;
+
   sku?: StringRequest;
   program?: StringRequest;
   date?: StringRequest;
@@ -78,6 +82,8 @@ export interface EventsRequestObject {
 }
 
 export interface MatchesRequestObject {
+  single?: boolean;
+
   sku?: StringRequest;
   division?: StringRequest;
   team?: StringRequest;
@@ -104,6 +110,8 @@ export interface MatchesRequestObject {
 }
 
 export interface RankingsRequestObject {
+  single?: boolean;
+
   sku?: StringRequest;
   division?: StringRequest;
   team?: StringRequest;
@@ -126,6 +134,8 @@ export interface RankingsRequestObject {
 }
 
 export interface SeasonRankingsRequestObject {
+  single?: boolean;
+
   program?: StringRequest;
   season?: StringRequest;
   team?: StringRequest;
@@ -137,6 +147,8 @@ export interface SeasonRankingsRequestObject {
 }
 
 export interface AwardsRequestObject {
+  single?: boolean;
+
   sku?: StringRequest;
   name?: StringRequest;
   team?: StringRequest;
@@ -148,6 +160,8 @@ export interface AwardsRequestObject {
 }
 
 export interface SkillsRequestObject {
+  single?: boolean;
+
   sku?: StringRequest;
   program?: StringRequest;
   type?: NumberRequest;
@@ -174,6 +188,7 @@ export const endpoints: Endpoint[] = [
 
 export const validParams = {
   events: [
+    "single",
     "sku",
     "program",
     "date",
@@ -188,6 +203,7 @@ export const validParams = {
     "nodata"
   ],
   teams: [
+    "single",
     "team",
     "program",
     "organisation",
@@ -202,6 +218,7 @@ export const validParams = {
     "nodata"
   ],
   matches: [
+    "single",
     "sku",
     "division",
     "team",
@@ -217,6 +234,7 @@ export const validParams = {
     "nodata"
   ],
   rankings: [
+    "single",
     "sku",
     "division",
     "team",
@@ -227,6 +245,7 @@ export const validParams = {
     "nodata"
   ],
   season_rankings: [
+    "single",
     "program",
     "season",
     "team",
@@ -236,6 +255,7 @@ export const validParams = {
     "nodata"
   ],
   awards: [
+    "single",
     "sku",
     "name",
     "team",
@@ -245,6 +265,7 @@ export const validParams = {
     "nodata"
   ],
   skills: [
+    "single",
     "sku",
     "program",
     "type",

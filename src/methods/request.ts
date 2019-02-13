@@ -34,6 +34,11 @@ export async function requestSize(endpoint, params) {
 }
 
 export async function requestAll(endpoint, params) {
+  // If user specifies it a single object, no need to make size control requests
+  if (params.single) {
+    return request(endpoint, params);
+  }
+
   return requestSize(endpoint, params)
     .then(size =>
       Promise.all(
