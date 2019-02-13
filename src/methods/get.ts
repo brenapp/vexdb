@@ -100,7 +100,9 @@ export async function get(endpoint, params = {}): Promise<ResponseObject[]> {
   // arrays. See util/permutations.ts for more information
   let res: ResponseObject[] = (await Promise.all(
     permutations(endpoint, params).map(param =>
-      requestAll(endpoint, standardize(endpoint, param)).then(res => res.result)
+      requestAll(endpoint, standardize(endpoint, { single: true, param })).then(
+        res => res.result
+      )
     )
   )).reduce((a, b) => a.concat(b), []); // Flatten list of responses into one
 
