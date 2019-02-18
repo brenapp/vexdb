@@ -100,22 +100,24 @@ export async function get(endpoint, params = {}): Promise<ResponseObject[]> {
   // arrays. See util/permutations.ts for more information
   let res: ResponseObject[] = (await Promise.all(
     permutations(endpoint, params).map(param =>
-      requestAll(endpoint, standardize(endpoint, { single: true, param })).then(
-        res => res.result
-      )
+      requestAll(
+        endpoint,
+        standardize(endpoint, { single: true, ...param })
+      ).then(res => res.result)
     )
   )).reduce((a, b) => a.concat(b), []); // Flatten list of responses into one
 
-  // Next, Uniquify the results
-  // Create keys to compare for uniques
-  let keys = res.map(item => JSON.stringify(item));
-  res = res.filter((v, i, a) => keys.indexOf(keys[i]) === i);
+  // Next, uniquify the results
+  // Do this with a set
+  res = [...new Set(res)];
 
   // Finally, do post request client-side filtering
   // First, let's get all of the parameters that require client-side filtering
   let clientside = filter(
     params,
-    (value, key) => typeof value == "function" || typeof value === "object"
+    (value, key) =>
+      (typeof value == "function" || typeof value === "object") &&
+      !validParams[endpoint].includes(key)
   );
   let filterKeys = Object.keys(clientside);
 
