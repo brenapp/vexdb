@@ -164,7 +164,7 @@ export namespace cache {
     const file = sanitize(endpoint, params);
     const store = await keya.store("vexdb");
 
-    if (store.get(file)) {
+    if ((await store.get(file)) !== undefined) {
       const record = await store.get(file);
       if (record.expiry > Date.now()) {
         return record.value;

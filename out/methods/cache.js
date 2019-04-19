@@ -34,13 +34,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var settings_1 = require("../constants/settings");
 var RequestObjects_1 = require("../constants/RequestObjects");
-var keya_1 = __importDefault(require("keya"));
+var keya = __importStar(require("keya"));
 function serialize(url, params) {
     var str = "";
     for (var p in params) {
@@ -66,13 +70,20 @@ function sanitize(endpoint, params) {
 }
 function cache(endpoint, params, value) {
     return __awaiter(this, void 0, void 0, function () {
-        var file;
+        var file, store, entry;
         return __generator(this, function (_a) {
-            file = "vexdb-" + sanitize(endpoint, params);
-            return [2, keya_1.default.set(file, {
-                    expiry: Date.now() + settings_1.settings.cache.ttl,
-                    value: value
-                })];
+            switch (_a.label) {
+                case 0:
+                    file = sanitize(endpoint, params);
+                    return [4, keya.store("vexdb")];
+                case 1:
+                    store = _a.sent();
+                    entry = { expiry: Date.now() + settings_1.settings.cache.ttl, value: value };
+                    return [4, store.set(file, entry)];
+                case 2:
+                    _a.sent();
+                    return [2, entry];
+            }
         });
     });
 }
@@ -80,22 +91,23 @@ exports.cache = cache;
 (function (cache) {
     function resolve(endpoint, params) {
         return __awaiter(this, void 0, void 0, function () {
-            var file, out;
+            var file, store, record;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        file = "vexdb-" + sanitize(endpoint, params);
-                        return [4, keya_1.default.has(file)];
+                        file = sanitize(endpoint, params);
+                        return [4, keya.store("vexdb")];
                     case 1:
-                        if (!_a.sent()) return [3, 3];
-                        return [4, keya_1.default.get(file)];
+                        store = _a.sent();
+                        if (!store.get(file)) return [3, 3];
+                        return [4, store.get(file)];
                     case 2:
-                        out = _a.sent();
-                        if (out.expiry > Date.now()) {
-                            return [2, out.value];
+                        record = _a.sent();
+                        if (record.expiry > Date.now()) {
+                            return [2, record.value];
                         }
                         else {
-                            return [2, keya_1.default.remove(file).then(function () { return undefined; })];
+                            return [2, store.delete(file).then(function () { return undefined; })];
                         }
                         return [3, 4];
                     case 3: return [2, undefined];
@@ -118,16 +130,13 @@ exports.cache = cache;
     cache.has = has;
     function clear() {
         return __awaiter(this, void 0, void 0, function () {
-            var keys, _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _b = (_a = Object).keys;
-                        return [4, keya_1.default.all()];
+            var store;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, keya.store("vexdb")];
                     case 1:
-                        keys = _b.apply(_a, [_c.sent()]);
-                        keys.filter(function (s) { return s.startsWith("vexdb-"); }).forEach(function (k) { return keya_1.default.remove(k); });
-                        return [2];
+                        store = _a.sent();
+                        return [2, store.clear()];
                 }
             });
         });
