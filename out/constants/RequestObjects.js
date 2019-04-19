@@ -11,6 +11,7 @@ exports.endpoints = [
 ];
 exports.validParams = {
     events: [
+        "single",
         "sku",
         "program",
         "date",
@@ -25,6 +26,7 @@ exports.validParams = {
         "nodata"
     ],
     teams: [
+        "single",
         "team",
         "program",
         "organisation",
@@ -39,6 +41,7 @@ exports.validParams = {
         "nodata"
     ],
     matches: [
+        "single",
         "sku",
         "division",
         "team",
@@ -54,6 +57,7 @@ exports.validParams = {
         "nodata"
     ],
     rankings: [
+        "single",
         "sku",
         "division",
         "team",
@@ -64,6 +68,7 @@ exports.validParams = {
         "nodata"
     ],
     season_rankings: [
+        "single",
         "program",
         "season",
         "team",
@@ -73,6 +78,7 @@ exports.validParams = {
         "nodata"
     ],
     awards: [
+        "single",
         "sku",
         "name",
         "team",
@@ -82,6 +88,7 @@ exports.validParams = {
         "nodata"
     ],
     skills: [
+        "single",
         "sku",
         "program",
         "type",

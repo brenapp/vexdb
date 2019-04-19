@@ -23,7 +23,7 @@ function permutations(endpoint, params) {
             .map(function (t, i) {
             var _a;
             return (_a = {},
-                _a[permutators[i]] = Object.values(params)[i][t],
+                _a[permutators[i]] = params[permutators[i]][t],
                 _a);
         })
             .reduce(function (a, b) { return Object.assign({}, a, b); }, params);

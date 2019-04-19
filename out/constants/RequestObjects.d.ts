@@ -6,6 +6,7 @@ export declare type NumberRequest = number | number[] | NumberRequestValidatorFu
 export declare type NumberRequestValidatorFunction = (itemValue: number, item: ResponseObject) => Promise<boolean> | boolean;
 export declare type RequestObject = TeamsRequestObject | EventsRequestObject | MatchesRequestObject | RankingsRequestObject | SeasonRankingsRequestObject | AwardsRequestObject | SkillsRequestObject;
 export interface TeamsRequestObject {
+    single?: boolean;
     team?: StringRequest;
     number?: StringRequest;
     team_name?: StringRequest;
@@ -22,6 +23,7 @@ export interface TeamsRequestObject {
     limit_start?: number;
 }
 export interface EventsRequestObject {
+    single?: boolean;
     sku?: StringRequest;
     program?: StringRequest;
     date?: StringRequest;
@@ -46,6 +48,7 @@ export interface EventsRequestObject {
     end?: StringRequest;
 }
 export interface MatchesRequestObject {
+    single?: boolean;
     sku?: StringRequest;
     division?: StringRequest;
     team?: StringRequest;
@@ -70,6 +73,7 @@ export interface MatchesRequestObject {
     bluescore?: NumberRequest;
 }
 export interface RankingsRequestObject {
+    single?: boolean;
     sku?: StringRequest;
     division?: StringRequest;
     team?: StringRequest;
@@ -90,6 +94,7 @@ export interface RankingsRequestObject {
     ccwm?: NumberRequest;
 }
 export interface SeasonRankingsRequestObject {
+    single?: boolean;
     program?: StringRequest;
     season?: StringRequest;
     team?: StringRequest;
@@ -99,6 +104,7 @@ export interface SeasonRankingsRequestObject {
     vrating?: NumberRequest;
 }
 export interface AwardsRequestObject {
+    single?: boolean;
     sku?: StringRequest;
     name?: StringRequest;
     team?: StringRequest;
@@ -108,6 +114,7 @@ export interface AwardsRequestObject {
     order?: NumberRequest;
 }
 export interface SkillsRequestObject {
+    single?: boolean;
     sku?: StringRequest;
     program?: StringRequest;
     type?: NumberRequest;

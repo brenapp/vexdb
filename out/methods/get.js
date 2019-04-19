@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -34,6 +45,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -51,7 +82,7 @@ function standardize(endpoint, params) {
 function get(endpoint, params) {
     if (params === void 0) { params = {}; }
     return __awaiter(this, void 0, void 0, function () {
-        var res, keys, clientside, filterKeys;
+        var res, clientside, filterKeys;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -60,13 +91,15 @@ function get(endpoint, params) {
                         return [2, Promise.reject(new RangeError("Endpoint " + endpoint + " not known. Valid endpoints are " + RequestObjects_2.endpoints.join(", ")))];
                     params = Object.assign({}, settings_1.settings.params, params);
                     return [4, Promise.all(permutations_1.default(endpoint, params).map(function (param) {
-                            return request_1.requestAll(endpoint, standardize(endpoint, param)).then(function (res) { return res.result; });
+                            return request_1.requestAll(endpoint, standardize(endpoint, __assign({ single: true }, param))).then(function (res) { return res.result; });
                         }))];
                 case 1:
                     res = (_a.sent()).reduce(function (a, b) { return a.concat(b); }, []);
-                    keys = res.map(function (item) { return JSON.stringify(item); });
-                    res = res.filter(function (v, i, a) { return keys.indexOf(keys[i]) === i; });
-                    clientside = object_1.filter(params, function (value, key) { return typeof value == "function" || typeof value === "object"; });
+                    res = __spread(new Set(res));
+                    clientside = object_1.filter(params, function (value, key) {
+                        return (typeof value == "function" || typeof value === "object") &&
+                            !RequestObjects_1.validParams[endpoint].includes(key);
+                    });
                     filterKeys = Object.keys(clientside);
                     return [2, object_1.asyncArrayFilter(res, function (item) { return __awaiter(_this, void 0, void 0, function () {
                             return __generator(this, function (_a) {
