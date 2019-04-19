@@ -11,7 +11,7 @@ import {
   EventsRequestObject,
   AwardsRequestObject
 } from "../constants/RequestObjects";
-import keya from "keya";
+import * as keya from "keya";
 import {
   ResponseObject,
   TeamsResponseObject,
@@ -49,13 +49,12 @@ function sanitize(endpoint, params) {
   return serialize(
     endpoint,
     Object.keys(params)
-      .filter(
-        key =>
-          validParams[endpoint].includes(key) &&
-          ["string", "number", "boolean"].includes(typeof params[key]) &&
-          key == "limit_start"
-            ? params[key] != 0
-            : true
+      .filter(key =>
+        validParams[endpoint].includes(key) &&
+        ["string", "number", "boolean"].includes(typeof params[key]) &&
+        key == "limit_start"
+          ? params[key] != 0
+          : true
       ) // Prevents non-existant key causing duplication
       .sort() // Prevents order causing duplication
       .reduce((obj, key) => ((obj[key] = params[key]), obj), {})
@@ -114,11 +113,13 @@ export function cache(
 ): Promise<CacheEntry<SkillsResponseObject>>;
 
 export async function cache(endpoint, params, value) {
-  let file = "vexdb-" + sanitize(endpoint, params);
-  return keya.set(file, {
-    expiry: Date.now() + settings.cache.ttl,
-    value
-  });
+  const file = sanitize(endpoint, params);
+  const store = await keya.store("vexdb");
+  const entry = { expiry: Date.now() + settings.cache.ttl, value };
+
+  await store.set(file, entry);
+
+  return entry;
 }
 
 export namespace cache {
@@ -160,13 +161,15 @@ export namespace cache {
   ): Promise<CacheEntry<SkillsResponseObject>>;
 
   export async function resolve(endpoint, params) {
-    let file = "vexdb-" + sanitize(endpoint, params);
-    if (await keya.has(file)) {
-      let out = await keya.get(file);
-      if (out.expiry > Date.now()) {
-        return out.value;
+    const file = sanitize(endpoint, params);
+    const store = await keya.store("vexdb");
+
+    if (store.get(file)) {
+      const record = await store.get(file);
+      if (record.expiry > Date.now()) {
+        return record.value;
       } else {
-        return keya.remove(file).then(() => undefined);
+        return store.delete(file).then(() => undefined);
       }
     } else {
       return undefined;
@@ -215,8 +218,8 @@ export namespace cache {
   }
 
   export async function clear() {
-    let keys = Object.keys(await keya.all());
-    keys.filter(s => s.startsWith("vexdb-")).forEach(k => keya.remove(k));
+    const store = await keya.store("vexdb");
+    return store.clear();
   }
 
   /**
@@ -245,13 +248,12 @@ export namespace cache {
     return serialize(
       endpoint,
       Object.keys(params)
-        .filter(
-          key =>
-            validParams[endpoint].includes(key) &&
-            ["string", "number", "boolean"].includes(typeof params[key]) &&
-            key == "limit_start"
-              ? params[key] != 0
-              : true
+        .filter(key =>
+          validParams[endpoint].includes(key) &&
+          ["string", "number", "boolean"].includes(typeof params[key]) &&
+          key == "limit_start"
+            ? params[key] != 0
+            : true
         ) // Prevents non-existant key causing duplication
         .sort() // Prevents order causing duplication
         .reduce((obj, key) => ((obj[key] = params[key]), obj), {})
