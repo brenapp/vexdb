@@ -99,9 +99,11 @@ exports.cache = cache;
                         return [4, keya.store("vexdb")];
                     case 1:
                         store = _a.sent();
-                        if (!store.get(file)) return [3, 3];
                         return [4, store.get(file)];
                     case 2:
+                        if (!((_a.sent()) !== undefined)) return [3, 4];
+                        return [4, store.get(file)];
+                    case 3:
                         record = _a.sent();
                         if (record.expiry > Date.now()) {
                             return [2, record.value];
@@ -109,9 +111,9 @@ exports.cache = cache;
                         else {
                             return [2, store.delete(file).then(function () { return undefined; })];
                         }
-                        return [3, 4];
-                    case 3: return [2, undefined];
-                    case 4: return [2];
+                        return [3, 5];
+                    case 4: return [2, undefined];
+                    case 5: return [2];
                 }
             });
         });
