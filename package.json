@@ -1,6 +1,6 @@
 {
   "name": "vexdb",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "description": "A simple tool for accessing the VexDB",
   "main": "./out/main.js",
   "typings": "./out/main.d.ts",
@@ -29,7 +29,7 @@
   "homepage": "https://github.com/MayorMonty/vexdb#readme",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
-    "keya": "^1.0.0"
+    "keya": "^1.1.2"
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.34",
