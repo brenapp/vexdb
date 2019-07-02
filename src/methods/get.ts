@@ -72,10 +72,6 @@ export function get(
   params: SkillsRequestObject
 ): Promise<SkillsResponseObject[]>;
 
-export function get(
-  endpoint: string,
-  params: RequestObject
-): Promise<ResponseObject[]>;
 export async function get(endpoint, params = {}): Promise<ResponseObject[]> {
   // Even though we're typescript, users of the module will not be, we should manually check endpoints
   if (!endpoints.includes(endpoint))
@@ -100,10 +96,7 @@ export async function get(endpoint, params = {}): Promise<ResponseObject[]> {
   // arrays. See util/permutations.ts for more information
   let res: ResponseObject[] = (await Promise.all(
     permutations(endpoint, params).map(param =>
-      requestAll(
-        endpoint,
-        standardize(endpoint, { single: true, ...param })
-      ).then(res => res.result)
+      requestAll(endpoint, standardize(endpoint, param)).then(res => res.result)
     )
   )).reduce((a, b) => a.concat(b), []); // Flatten list of responses into one
 
@@ -121,11 +114,15 @@ export async function get(endpoint, params = {}): Promise<ResponseObject[]> {
   );
   let filterKeys = Object.keys(clientside);
 
-  return asyncArrayFilter<ResponseObject>(res, async item => {
-    return (await Promise.all(
-      filterKeys.map(key => applyFilter(item, key, clientside[key]))
-    )).every(a => !!a);
-  });
+  const indices = (await Promise.all(
+    res.map(item =>
+      Promise.all([
+        ...filterKeys.map(key => applyFilter(item, key, params[key]))
+      ])
+    )
+  )).map(r => r.every(a => a));
+
+  return res.filter((v, i) => indices[i]);
 }
 
 export function size(
