@@ -82,7 +82,7 @@ export function live(
   params: LiveRequestObject<RequestObject>
 ): LiveEventEmitter<RequestObject, ResponseObject>;
 
-export function live(endpoint, params: LiveRequestObject<RequestObject>) {
+export function live(endpoint, params) {
   let results = [],
     keys = [],
     emitter = new EventEmitter();
