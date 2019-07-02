@@ -7,26 +7,26 @@ import { get } from "../out/main";
 
 test(".get() correctly resolves for simple requests", async t => {
   Promise.all([
-    get("events", { season: "StarStruck" }).then(
-      res => (res.length > 0 ? null : t.fail())
+    get("events", { season: "StarStruck" }).then(res =>
+      res.length > 0 ? null : t.fail()
     ),
-    get("teams", { region: "South Carolina" }).then(
-      res => (res.length > 0 ? null : t.fail())
+    get("teams", { region: "South Carolina" }).then(res =>
+      res.length > 0 ? null : t.fail()
     ),
-    get("matches", { sku: "RE-VRC-17-3805" }).then(
-      res => (res.length > 0 ? null : t.fail())
+    get("matches", { sku: "RE-VRC-17-3805" }).then(res =>
+      res.length > 0 ? null : t.fail()
     ),
-    get("rankings", { team: "3796B" }).then(
-      res => (res.length > 0 ? null : t.fail())
+    get("rankings", { team: "3796B" }).then(res =>
+      res.length > 0 ? null : t.fail()
     ),
-    get("season_rankings", { team: "7447B" }).then(
-      res => (res.length > 0 ? null : t.fail())
+    get("season_rankings", { team: "7447B" }).then(res =>
+      res.length > 0 ? null : t.fail()
     ),
-    get("skills", { team: "3796B" }).then(
-      res => (res.length > 0 ? null : t.fail())
+    get("skills", { team: "3796B" }).then(res =>
+      res.length > 0 ? null : t.fail()
     ),
-    get("awards", { sku: "RE-VRC-17-3805" }).then(
-      res => (res.length > 0 ? null : t.fail())
+    get("awards", { sku: "RE-VRC-17-3805" }).then(res =>
+      res.length > 0 ? null : t.fail()
     )
   ]).then(() => t.pass());
 });
