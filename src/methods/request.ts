@@ -7,7 +7,8 @@
 import "isomorphic-fetch";
 import { Endpoint } from "../constants/RequestObjects";
 import { settings } from "../constants/settings";
-// import { cache } from "./cache";
+import * as cache from "./cache";
+import { ResponseObject } from "../constants/ResponseObjects";
 
 /**
  * Converts a parameters object into URL Encoded String
@@ -28,7 +29,11 @@ export function serialize(params: object) {
 
 export default async function request(endpoint, params: object = {}) {
   // Check Cache
-  // @TODO
+  const entry = await cache.resolve(endpoint, params);
+
+  if (entry) {
+    return entry.result;
+  }
 
   // Fetch Data
   const data = await fetch(
@@ -39,7 +44,8 @@ export default async function request(endpoint, params: object = {}) {
   ).then((data) => data.json());
 
   if (data.status) {
-    // Add to cache here
+    await cache.store(endpoint, params, data);
+
     return data;
   } else {
     return Promise.reject(Promise.reject(new Error(data.error_text)));
@@ -53,7 +59,10 @@ export async function requestSize(endpoint, params) {
   ).then((res) => (res ? res.size : 0));
 }
 
-export async function requestAll(endpoint, params) {
+export async function requestAll(
+  endpoint,
+  params
+): Promise<{ status: 0 | 1; size: number; result: ResponseObject[] }> {
   return requestSize(endpoint, params)
     .then((size) =>
       Promise.all(
