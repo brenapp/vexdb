@@ -5,7 +5,7 @@ import {
   RankingsResponseObject,
   SeasonRankingsResponseObject,
   AwardsResponseObject,
-  SkillsResponseObject
+  SkillsResponseObject,
 } from "./ResponseObjects";
 
 export type Endpoint =
@@ -46,7 +46,6 @@ export type RequestObject =
   | SkillsRequestObject;
 
 export interface TeamsRequestObject {
-
   team?: StringRequest<TeamsResponseObject>;
   number?: StringRequest<TeamsResponseObject>;
   team_name?: StringRequest<TeamsResponseObject>;
@@ -64,7 +63,6 @@ export interface TeamsRequestObject {
 }
 
 export interface EventsRequestObject {
-
   sku?: StringRequest<EventsResponseObject>;
   program?: StringRequest<EventsResponseObject>;
   date?: StringRequest<EventsResponseObject>;
@@ -91,7 +89,6 @@ export interface EventsRequestObject {
 }
 
 export interface MatchesRequestObject {
-
   sku?: StringRequest<MatchesResponseObject>;
   division?: StringRequest<MatchesResponseObject>;
   team?: StringRequest<MatchesResponseObject>;
@@ -118,7 +115,6 @@ export interface MatchesRequestObject {
 }
 
 export interface RankingsRequestObject {
-
   sku?: StringRequest<RankingsResponseObject>;
   division?: StringRequest<RankingsResponseObject>;
   team?: StringRequest<RankingsResponseObject>;
@@ -141,7 +137,6 @@ export interface RankingsRequestObject {
 }
 
 export interface SeasonRankingsRequestObject {
-
   program?: StringRequest<SeasonRankingsResponseObject>;
   season?: StringRequest<SeasonRankingsResponseObject>;
   team?: StringRequest<SeasonRankingsResponseObject>;
@@ -153,7 +148,6 @@ export interface SeasonRankingsRequestObject {
 }
 
 export interface AwardsRequestObject {
-
   sku?: StringRequest<AwardsResponseObject>;
   name?: StringRequest<AwardsResponseObject>;
   team?: StringRequest<AwardsResponseObject>;
@@ -165,7 +159,6 @@ export interface AwardsRequestObject {
 }
 
 export interface SkillsRequestObject {
-
   sku?: StringRequest<SkillsResponseObject>;
   program?: StringRequest<SkillsResponseObject>;
   type?: NumberRequest<SkillsResponseObject>;
@@ -187,12 +180,11 @@ export const endpoints: Endpoint[] = [
   "rankings",
   "season_rankings",
   "awards",
-  "skills"
+  "skills",
 ];
 
 export const validParams = {
   events: [
-    "single",
     "sku",
     "program",
     "date",
@@ -204,10 +196,9 @@ export const validParams = {
     "status",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   teams: [
-    "single",
     "team",
     "program",
     "organisation",
@@ -219,10 +210,9 @@ export const validParams = {
     "sku",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   matches: [
-    "single",
     "sku",
     "division",
     "team",
@@ -235,10 +225,9 @@ export const validParams = {
     "season",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   rankings: [
-    "single",
     "sku",
     "division",
     "team",
@@ -246,30 +235,27 @@ export const validParams = {
     "season",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   season_rankings: [
-    "single",
     "program",
     "season",
     "team",
     "vrating_rank",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   awards: [
-    "single",
     "sku",
     "name",
     "team",
     "season",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   skills: [
-    "single",
     "sku",
     "program",
     "type",
@@ -279,6 +265,6 @@ export const validParams = {
     "season_rank",
     "limit_number",
     "limit_start",
-    "nodata"
-  ]
+    "nodata",
+  ],
 };
