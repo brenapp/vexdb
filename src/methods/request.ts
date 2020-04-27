@@ -37,7 +37,10 @@ export default async function request(endpoint, params: object = {}) {
 
   // Fetch Data
   const data = await fetch(
-    `${settings.baseURL}/get_${endpoint}?${serialize(params)}`,
+    `${settings.baseURL}/get_${endpoint}?${serialize({
+      ...settings.params,
+      ...params,
+    })}`,
     {
       headers: settings.headers,
     }
