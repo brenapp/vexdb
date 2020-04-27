@@ -13,8 +13,9 @@ test("Register a header", (t) => {
 });
 
 test("Register a default parameter", async (t) => {
+  const cmp = await size("events", { season: "Nothing But Net" });
   constant.param({
     season: "Nothing But Net",
   });
-  t.is(await size("events"), 1044);
+  t.is(await size("events"), cmp);
 });
