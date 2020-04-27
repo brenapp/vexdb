@@ -1,26 +1,45 @@
 /**
- * Performs a basic request to the VexDB API
+ * Abstracts over isomorphic fetch to create more useful request utilites
+ * Specifically, the requestAll function respects internal cache, and makes
+ * enough requests to ensure that all results are returned
  */
 
 import "isomorphic-fetch";
 import { Endpoint } from "../constants/RequestObjects";
 import { settings } from "../constants/settings";
-import { cache } from "./cache";
+// import { cache } from "./cache";
+
+/**
+ * Converts a parameters object into URL Encoded String
+ */
+export function serialize(params: object) {
+  let str = "";
+
+  for (let key in params) {
+    if (str != "") {
+      str += "&";
+    }
+
+    str += key + "=" + encodeURIComponent(params[key]);
+  }
+
+  return str;
+}
 
 export default async function request(endpoint, params: object = {}) {
   // Check Cache
-  if (await cache.has(endpoint, params)) return cache.resolve(endpoint, params);
+  // @TODO
 
   // Fetch Data
   const data = await fetch(
-    `${settings.baseURL}/get_${cache.sanitize(endpoint, params)}`,
+    `${settings.baseURL}/get_${endpoint}?${serialize(params)}`,
     {
-      headers: settings.headers
+      headers: settings.headers,
     }
-  ).then(data => data.json());
+  ).then((data) => data.json());
 
   if (data.status) {
-    cache(endpoint, params, data);
+    // Add to cache here
     return data;
   } else {
     return Promise.reject(Promise.reject(new Error(data.error_text)));
@@ -28,19 +47,15 @@ export default async function request(endpoint, params: object = {}) {
 }
 
 export async function requestSize(endpoint, params) {
-  return request(endpoint, Object.assign({}, params, { nodata: true })).then(
-    res => (res ? res.size : 0)
-  );
+  return request(
+    endpoint,
+    Object.assign({}, params, { nodata: true })
+  ).then((res) => (res ? res.size : 0));
 }
 
 export async function requestAll(endpoint, params) {
-  // If user specifies it a single object, no need to make size control requests
-  if (params.single) {
-    return request(endpoint, params);
-  }
-
   return requestSize(endpoint, params)
-    .then(size =>
+    .then((size) =>
       Promise.all(
         new Array(Math.ceil(size / 5000))
           .fill(endpoint)
@@ -49,9 +64,9 @@ export async function requestAll(endpoint, params) {
           )
       )
     )
-    .then(result => ({
+    .then((result) => ({
       status: result[0] ? result[0].status : 0,
       size: result.reduce((a, b) => a + b.size, 0),
-      result: result.reduce((a, b) => a.concat(b.result), [])
+      result: result.reduce((a, b) => a.concat(b.result), []),
     }));
 }

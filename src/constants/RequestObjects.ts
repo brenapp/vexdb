@@ -46,7 +46,6 @@ export type RequestObject =
   | SkillsRequestObject;
 
 export interface TeamsRequestObject {
-  single?: boolean;
 
   team?: StringRequest<TeamsResponseObject>;
   number?: StringRequest<TeamsResponseObject>;
@@ -65,7 +64,6 @@ export interface TeamsRequestObject {
 }
 
 export interface EventsRequestObject {
-  single?: boolean;
 
   sku?: StringRequest<EventsResponseObject>;
   program?: StringRequest<EventsResponseObject>;
@@ -93,7 +91,6 @@ export interface EventsRequestObject {
 }
 
 export interface MatchesRequestObject {
-  single?: boolean;
 
   sku?: StringRequest<MatchesResponseObject>;
   division?: StringRequest<MatchesResponseObject>;
@@ -121,7 +118,6 @@ export interface MatchesRequestObject {
 }
 
 export interface RankingsRequestObject {
-  single?: boolean;
 
   sku?: StringRequest<RankingsResponseObject>;
   division?: StringRequest<RankingsResponseObject>;
@@ -145,7 +141,6 @@ export interface RankingsRequestObject {
 }
 
 export interface SeasonRankingsRequestObject {
-  single?: boolean;
 
   program?: StringRequest<SeasonRankingsResponseObject>;
   season?: StringRequest<SeasonRankingsResponseObject>;
@@ -158,7 +153,6 @@ export interface SeasonRankingsRequestObject {
 }
 
 export interface AwardsRequestObject {
-  single?: boolean;
 
   sku?: StringRequest<AwardsResponseObject>;
   name?: StringRequest<AwardsResponseObject>;
@@ -171,7 +165,6 @@ export interface AwardsRequestObject {
 }
 
 export interface SkillsRequestObject {
-  single?: boolean;
 
   sku?: StringRequest<SkillsResponseObject>;
   program?: StringRequest<SkillsResponseObject>;
