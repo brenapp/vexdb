@@ -13,8 +13,6 @@ import {
   SeasonRankingsRequestObject,
   AwardsRequestObject,
   SkillsRequestObject,
-  Endpoint,
-  RequestObject,
   validParams,
 } from "../constants/RequestObjects";
 
@@ -108,8 +106,6 @@ export default async function get(endpoint, params) {
       processing.push((result) => params[key] === result[key]);
     }
   }
-
-  console.log(direct, processing);
 
   // This'll reject if the req.status != 1
   const req = await requestAll(endpoint, direct);
