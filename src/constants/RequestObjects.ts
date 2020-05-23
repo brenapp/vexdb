@@ -17,13 +17,13 @@ export type Endpoint =
   | "awards"
   | "skills";
 
-export type StringRequest<T> =
-  | string
-  | string[]
+export type StringRequest<T, S = string> =
+  | S
+  | S[]
   | RegExp
-  | StringRequestValidatorFunction<T>;
-export type StringRequestValidatorFunction<T> = (
-  itemValue: string,
+  | StringRequestValidatorFunction<T, S>;
+export type StringRequestValidatorFunction<T, S> = (
+  itemValue: S,
   item: T
 ) => Promise<boolean> | boolean;
 
@@ -45,17 +45,36 @@ export type RequestObject =
   | AwardsRequestObject
   | SkillsRequestObject;
 
+export type Seasons =
+  | "Change Up"
+  | "Tower Takeover"
+  | "Turning Point"
+  | "In The Zone"
+  | "StarStruck"
+  | "Nothing But Net"
+  | "Skyrise"
+  | "Toss Up"
+  | "Sack Attack"
+  | "Gateway"
+  | "Round Up"
+  | "Clean Sweep"
+  | "Elevation"
+  | "Bridge Battle";
+
 export interface TeamsRequestObject {
   team?: StringRequest<TeamsResponseObject>;
   number?: StringRequest<TeamsResponseObject>;
   team_name?: StringRequest<TeamsResponseObject>;
   robot_name?: StringRequest<TeamsResponseObject>;
-  program?: StringRequest<TeamsResponseObject>;
+  program?: StringRequest<TeamsResponseObject, "VRC" | "VEXU">;
   organisation?: StringRequest<TeamsResponseObject>;
   city?: StringRequest<TeamsResponseObject>;
   region?: StringRequest<TeamsResponseObject>;
   country?: StringRequest<TeamsResponseObject>;
-  grade?: StringRequest<TeamsResponseObject>;
+  grade?: StringRequest<
+    TeamsResponseObject,
+    "College" | "High School" | "Middle School"
+  >;
   is_registered?: NumberRequest<TeamsResponseObject>;
   sku?: StringRequest<TeamsResponseObject>;
   limit_number?: number;
@@ -64,9 +83,9 @@ export interface TeamsRequestObject {
 
 export interface EventsRequestObject {
   sku?: StringRequest<EventsResponseObject>;
-  program?: StringRequest<EventsResponseObject>;
+  program?: StringRequest<EventsResponseObject, "VRC" | "VEXU">;
   date?: StringRequest<EventsResponseObject>;
-  season?: StringRequest<EventsResponseObject>;
+  season?: StringRequest<EventsResponseObject, Seasons>;
   city?: StringRequest<EventsResponseObject>;
   region?: StringRequest<EventsResponseObject>;
   country?: StringRequest<EventsResponseObject>;
@@ -98,7 +117,7 @@ export interface MatchesRequestObject {
   scheduled?: NumberRequest<MatchesResponseObject>;
   field?: StringRequest<MatchesResponseObject>;
   scored?: NumberRequest<MatchesResponseObject>;
-  season?: StringRequest<MatchesResponseObject>;
+  season?: StringRequest<MatchesResponseObject, Seasons>;
   limit_number?: number;
   limit_start?: number;
 
@@ -119,7 +138,7 @@ export interface RankingsRequestObject {
   division?: StringRequest<RankingsResponseObject>;
   team?: StringRequest<RankingsResponseObject>;
   rank?: StringRequest<RankingsResponseObject>;
-  season?: StringRequest<RankingsResponseObject>;
+  season?: StringRequest<RankingsResponseObject, Seasons>;
   limit_number?: number;
   limit_start?: number;
 
@@ -137,8 +156,8 @@ export interface RankingsRequestObject {
 }
 
 export interface SeasonRankingsRequestObject {
-  program?: StringRequest<SeasonRankingsResponseObject>;
-  season?: StringRequest<SeasonRankingsResponseObject>;
+  program?: StringRequest<SeasonRankingsResponseObject, "VRC" | "VEXU">;
+  season?: StringRequest<SeasonRankingsResponseObject, Seasons>;
   team?: StringRequest<SeasonRankingsResponseObject>;
   vrating_rank?: NumberRequest<SeasonRankingsResponseObject>;
   limit_number?: number;
@@ -151,7 +170,7 @@ export interface AwardsRequestObject {
   sku?: StringRequest<AwardsResponseObject>;
   name?: StringRequest<AwardsResponseObject>;
   team?: StringRequest<AwardsResponseObject>;
-  season?: StringRequest<AwardsResponseObject>;
+  season?: StringRequest<AwardsResponseObject, Seasons>;
   limit_number?: number;
   limit_start?: number;
 
@@ -160,10 +179,10 @@ export interface AwardsRequestObject {
 
 export interface SkillsRequestObject {
   sku?: StringRequest<SkillsResponseObject>;
-  program?: StringRequest<SkillsResponseObject>;
+  program?: StringRequest<SkillsResponseObject, "VRC" | "VEXU">;
   type?: NumberRequest<SkillsResponseObject>;
   team?: StringRequest<SkillsResponseObject>;
-  season?: StringRequest<SkillsResponseObject>;
+  season?: StringRequest<SkillsResponseObject, Seasons>;
   rank?: NumberRequest<SkillsResponseObject>;
   season_rank?: NumberRequest<SkillsResponseObject>;
   limit_number?: number;
