@@ -12,6 +12,7 @@ import {
   SeasonRankingsRequestObject,
   AwardsRequestObject,
   SkillsRequestObject,
+  RequestObject,
 } from "../constants/RequestObjects";
 
 import {
@@ -27,6 +28,7 @@ import {
 import { serialize } from "./request";
 
 import * as keya from "keya";
+import SQLiteStore from "keya/out/node/sqlite";
 
 export interface APIResponse<T> {
   status: 0 | 1;
@@ -42,111 +44,107 @@ export interface CacheEntry<T> {
 export async function store(
   endpoint: "teams",
   params: TeamsRequestObject,
-  value: APIResponse<TeamsResponseObject[]>
-): Promise<CacheEntry<TeamsResponseObject>>;
+  data: APIResponse<TeamsResponseObject>
+): Promise<boolean>;
 
 export async function store(
   endpoint: "events",
   params: EventsRequestObject,
-  value: APIResponse<EventsResponseObject[]>
-): Promise<CacheEntry<EventsResponseObject>>;
+  data: APIResponse<EventsResponseObject>
+): Promise<boolean>;
 
 export async function store(
   endpoint: "matches",
   params: MatchesRequestObject,
-  value: APIResponse<MatchesResponseObject[]>
-): Promise<CacheEntry<MatchesResponseObject>>;
+  data: APIResponse<MatchesResponseObject>
+): Promise<boolean>;
 
 export async function store(
   endpoint: "rankings",
   params: RankingsRequestObject,
-  value: APIResponse<RankingsResponseObject[]>
-): Promise<CacheEntry<RankingsResponseObject>>;
+  data: APIResponse<RankingsResponseObject>
+): Promise<boolean>;
 
 export async function store(
   endpoint: "season_rankings",
   params: SeasonRankingsRequestObject,
-  value: APIResponse<SeasonRankingsResponseObject[]>
-): Promise<CacheEntry<SeasonRankingsResponseObject>>;
-
-export async function store(
-  endpoint: "awards",
-  params: AwardsRequestObject,
-  value: APIResponse<AwardsResponseObject[]>
-): Promise<CacheEntry<AwardsResponseObject>>;
+  data: APIResponse<SeasonRankingsResponseObject>
+): Promise<boolean>;
 
 export async function store(
   endpoint: "skills",
   params: SkillsRequestObject,
-  value: APIResponse<SkillsResponseObject[]>
-): Promise<CacheEntry<SkillsResponseObject>>;
+  data: APIResponse<SkillsResponseObject>
+): Promise<boolean>;
+
+export async function store(
+  endpoint: "awards",
+  params: AwardsRequestObject,
+  data: APIResponse<AwardsResponseObject>
+): Promise<boolean>;
 
 export async function store(endpoint, params, value) {
-  // Get the cache string and the DB
-  const name = `${endpoint}?${serialize(params)}`;
-  const store = await keya.store(`vexdb`);
+  const store = await keya.store<CacheEntry<ResponseObject>>(
+    `vexdb${endpoint}`
+  );
 
-  // Make the cache entry
-  const entry = {
-    expires: Date.now() + settings.cache.ttl,
-    value,
-  };
+  const key = encodeURIComponent(JSON.stringify(params));
+  const expires = Date.now() + settings.cache.ttl;
 
-  await store.set(name, entry);
-  await store.save();
-
-  return entry;
+  return store.set(key, { expires, value });
 }
 
 export async function resolve(
   endpoint: "teams",
   params: TeamsRequestObject
-): Promise<APIResponse<TeamsResponseObject> | undefined>;
+): Promise<APIResponse<TeamsRequestObject>>;
 
 export async function resolve(
   endpoint: "events",
   params: EventsRequestObject
-): Promise<APIResponse<EventsResponseObject> | undefined>;
+): Promise<APIResponse<EventsRequestObject>>;
 
 export async function resolve(
   endpoint: "matches",
   params: MatchesRequestObject
-): Promise<APIResponse<MatchesResponseObject> | undefined>;
+): Promise<APIResponse<MatchesRequestObject>>;
 
 export async function resolve(
   endpoint: "rankings",
   params: RankingsRequestObject
-): Promise<APIResponse<RankingsResponseObject> | undefined>;
+): Promise<APIResponse<RankingsRequestObject>>;
 
 export async function resolve(
   endpoint: "season_rankings",
   params: SeasonRankingsRequestObject
-): Promise<APIResponse<SeasonRankingsResponseObject> | undefined>;
-
-export async function resolve(
-  endpoint: "awards",
-  params: AwardsRequestObject
-): Promise<APIResponse<AwardsResponseObject> | undefined>;
+): Promise<APIResponse<SeasonRankingsRequestObject>>;
 
 export async function resolve(
   endpoint: "skills",
   params: SkillsRequestObject
-): Promise<APIResponse<SkillsResponseObject> | undefined>;
+): Promise<APIResponse<SkillsRequestObject>>;
+
+export async function resolve(
+  endpoint: "awards",
+  params: AwardsRequestObject
+): Promise<APIResponse<AwardsRequestObject>>;
 
 export async function resolve(endpoint, params) {
-  const name = `${endpoint}?${serialize(params)}`;
-  const store = await keya.store(`vexdb`);
+  const store = await keya.store<CacheEntry<any>>(`vexdb${endpoint}`);
 
-  const response = await store.get(name);
+  const key = encodeURIComponent(JSON.stringify(params));
+  const has = await store.has(key);
 
-  if (!response) {
-    return undefined;
+  if (!has) {
+    return null;
   }
 
-  if (response.expires > Date.now()) {
-    store.delete(name);
-    return undefined;
-  } else {
-    return response.value;
+  const record = await store.get(key);
+
+  if (record.expires < Date.now()) {
+    store.delete(key);
+    return null;
   }
+
+  return record.value;
 }
