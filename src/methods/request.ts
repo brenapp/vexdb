@@ -27,12 +27,12 @@ export function serialize(params: object) {
   return str;
 }
 
-export default async function request(endpoint, params: object = {}) {
+export async function request(endpoint, params: object = {}) {
   // Check Cache
   const entry = await cache.resolve(endpoint, params);
 
-  if (entry) {
-    return entry.result;
+  if (entry !== null) {
+    return entry;
   }
 
   // Fetch Data
@@ -62,7 +62,7 @@ export async function requestSize(endpoint, params) {
   ).then((res) => (res ? res.size : 0));
 }
 
-export async function requestAll(
+export default async function requestAll(
   endpoint,
   params
 ): Promise<{ status: 0 | 1; size: number; result: ResponseObject[] }> {
