@@ -46,5 +46,5 @@ export default async function size(
 ): Promise<number>;
 
 export default function size(endpoint, params) {
-  return get(endpoint, params).then((r) => r.length);
+  return get(endpoint, { ...params, nodata: true }).then((r) => r.length);
 }
