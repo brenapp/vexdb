@@ -1,262 +1,150 @@
-import { isBrowser, settings } from "../constants/settings";
+/**
+ * Caching utilites
+ */
+
+import { settings } from "../constants/settings";
 import {
-  validParams,
   Endpoint,
-  RequestObject,
   TeamsRequestObject,
-  SkillsRequestObject,
-  SeasonRankingsRequestObject,
-  RankingsRequestObject,
-  MatchesRequestObject,
   EventsRequestObject,
-  AwardsRequestObject
+  MatchesRequestObject,
+  RankingsRequestObject,
+  SeasonRankingsRequestObject,
+  AwardsRequestObject,
+  SkillsRequestObject,
+  RequestObject,
 } from "../constants/RequestObjects";
-import * as keya from "keya";
+
 import {
-  ResponseObject,
   TeamsResponseObject,
-  SkillsResponseObject,
-  AwardsResponseObject,
-  SeasonRankingsResponseObject,
-  RankingsResponseObject,
+  EventsResponseObject,
   MatchesResponseObject,
-  EventsResponseObject
+  RankingsResponseObject,
+  SeasonRankingsResponseObject,
+  AwardsResponseObject,
+  SkillsResponseObject,
+  ResponseObject,
 } from "../constants/ResponseObjects";
+import { serialize } from "./request";
 
-/**
- * Serializes a URL
- * @param url
- * @param params
- */
-function serialize(url, params) {
-  let str = "";
-  for (var p in params) {
-    if (params.hasOwnProperty(p)) {
-      if (str !== "") str += "&";
-      str += `${p}=${encodeURIComponent(params[p])}`;
-    }
-  }
+import * as keya from "keya";
+import SQLiteStore from "keya/out/node/sqlite";
 
-  return `${url}?${str}`;
-}
-
-/**
- * Turns endpoint and params into an appropriate Cache URL
- * @param endpoint
- * @param params
- */
-function sanitize(endpoint, params) {
-  return serialize(
-    endpoint,
-    Object.keys(params)
-      .filter(key =>
-        validParams[endpoint].includes(key) &&
-        ["string", "number", "boolean"].includes(typeof params[key]) &&
-        key == "limit_start"
-          ? params[key] != 0
-          : true
-      ) // Prevents non-existant key causing duplication
-      .sort() // Prevents order causing duplication
-      .reduce((obj, key) => ((obj[key] = params[key]), obj), {})
-  );
+export interface APIResponse<T> {
+  status: 0 | 1;
+  size: number;
+  result: T[];
 }
 
 export interface CacheEntry<T> {
-  expiry: number;
-  value: {
-    status: 0 | 1;
-    size: number;
-    result: T[];
-  };
+  expires: number;
+  value: APIResponse<T>;
 }
 
-export function cache(
+export async function store(
   endpoint: "teams",
   params: TeamsRequestObject,
-  value: TeamsResponseObject[]
-): Promise<CacheEntry<TeamsResponseObject>>;
+  data: APIResponse<TeamsResponseObject>
+): Promise<boolean>;
 
-export function cache(
+export async function store(
   endpoint: "events",
   params: EventsRequestObject,
-  value: EventsResponseObject[]
-): Promise<CacheEntry<EventsResponseObject>>;
+  data: APIResponse<EventsResponseObject>
+): Promise<boolean>;
 
-export function cache(
+export async function store(
   endpoint: "matches",
   params: MatchesRequestObject,
-  value: MatchesResponseObject[]
-): Promise<CacheEntry<MatchesResponseObject>>;
+  data: APIResponse<MatchesResponseObject>
+): Promise<boolean>;
 
-export function cache(
+export async function store(
   endpoint: "rankings",
   params: RankingsRequestObject,
-  value: RankingsResponseObject[]
-): Promise<CacheEntry<RankingsResponseObject>>;
+  data: APIResponse<RankingsResponseObject>
+): Promise<boolean>;
 
-export function cache(
+export async function store(
   endpoint: "season_rankings",
   params: SeasonRankingsRequestObject,
-  value: SeasonRankingsResponseObject[]
-): Promise<CacheEntry<SeasonRankingsResponseObject>>;
+  data: APIResponse<SeasonRankingsResponseObject>
+): Promise<boolean>;
 
-export function cache(
-  endpoint: "awards",
-  params: AwardsRequestObject,
-  value: AwardsResponseObject[]
-): Promise<CacheEntry<AwardsResponseObject>>;
-
-export function cache(
+export async function store(
   endpoint: "skills",
   params: SkillsRequestObject,
-  value: SkillsResponseObject[]
-): Promise<CacheEntry<SkillsResponseObject>>;
+  data: APIResponse<SkillsResponseObject>
+): Promise<boolean>;
 
-export async function cache(endpoint, params, value) {
-  const file = sanitize(endpoint, params);
-  const store = await keya.store("vexdb");
-  const entry = { expiry: Date.now() + settings.cache.ttl, value };
+export async function store(
+  endpoint: "awards",
+  params: AwardsRequestObject,
+  data: APIResponse<AwardsResponseObject>
+): Promise<boolean>;
 
-  await store.set(file, entry);
+export async function store(endpoint, params, value) {
+  const store = await keya.store<CacheEntry<ResponseObject>>(
+    `vexdb${endpoint}`
+  );
 
-  return entry;
+  const key = encodeURIComponent(JSON.stringify(params));
+  const expires = Date.now() + settings.cache.ttl;
+
+  return store.set(key, { expires, value });
 }
 
-export namespace cache {
-  /**
-   * RESOLVE
-   */
-  export async function resolve(
-    endpoint: "teams",
-    params: TeamsRequestObject
-  ): Promise<CacheEntry<TeamsResponseObject>>;
-  export async function resolve(
-    endpoint: "events",
-    params: EventsRequestObject
-  ): Promise<CacheEntry<EventsResponseObject>>;
+export async function resolve(
+  endpoint: "teams",
+  params: TeamsRequestObject
+): Promise<APIResponse<TeamsRequestObject>>;
 
-  export async function resolve(
-    endpoint: "matches",
-    params: MatchesRequestObject
-  ): Promise<CacheEntry<MatchesResponseObject>>;
+export async function resolve(
+  endpoint: "events",
+  params: EventsRequestObject
+): Promise<APIResponse<EventsRequestObject>>;
 
-  export async function resolve(
-    endpoint: "rankings",
-    params: RankingsRequestObject
-  ): Promise<CacheEntry<RankingsResponseObject>>;
+export async function resolve(
+  endpoint: "matches",
+  params: MatchesRequestObject
+): Promise<APIResponse<MatchesRequestObject>>;
 
-  export async function resolve(
-    endpoint: "season_rankings",
-    params: SeasonRankingsRequestObject
-  ): Promise<CacheEntry<SeasonRankingsResponseObject>>;
+export async function resolve(
+  endpoint: "rankings",
+  params: RankingsRequestObject
+): Promise<APIResponse<RankingsRequestObject>>;
 
-  export async function resolve(
-    endpoint: "awards",
-    params: AwardsRequestObject
-  ): Promise<CacheEntry<AwardsResponseObject>>;
+export async function resolve(
+  endpoint: "season_rankings",
+  params: SeasonRankingsRequestObject
+): Promise<APIResponse<SeasonRankingsRequestObject>>;
 
-  export async function resolve(
-    endpoint: "skills",
-    params: SkillsRequestObject
-  ): Promise<CacheEntry<SkillsResponseObject>>;
+export async function resolve(
+  endpoint: "skills",
+  params: SkillsRequestObject
+): Promise<APIResponse<SkillsRequestObject>>;
 
-  export async function resolve(endpoint, params) {
-    const file = sanitize(endpoint, params);
-    const store = await keya.store("vexdb");
+export async function resolve(
+  endpoint: "awards",
+  params: AwardsRequestObject
+): Promise<APIResponse<AwardsRequestObject>>;
 
-    if ((await store.get(file)) !== undefined) {
-      const record = await store.get(file);
-      if (record.expiry > Date.now()) {
-        return record.value;
-      } else {
-        return store.delete(file).then(() => undefined);
-      }
-    } else {
-      return undefined;
-    }
+export async function resolve(endpoint, params) {
+  const store = await keya.store<CacheEntry<any>>(`vexdb${endpoint}`);
+
+  const key = encodeURIComponent(JSON.stringify(params));
+  const has = await store.has(key);
+
+  if (!has) {
+    return null;
   }
 
-  /**
-   * HAS
-   */
-  export async function has(
-    endpoint: "teams",
-    params: TeamsRequestObject
-  ): Promise<boolean>;
+  const record = await store.get(key);
 
-  export async function has(
-    endpoint: "events",
-    params: EventsRequestObject
-  ): Promise<boolean>;
-
-  export async function has(
-    endpoint: "matches",
-    params: MatchesRequestObject
-  ): Promise<boolean>;
-
-  export async function has(
-    endpoint: "rankings",
-    params: RankingsRequestObject
-  ): Promise<boolean>;
-
-  export async function has(
-    endpoint: "season_rankings",
-    params: SeasonRankingsRequestObject
-  ): Promise<boolean>;
-
-  export async function has(
-    endpoint: "awards",
-    params: AwardsRequestObject
-  ): Promise<boolean>;
-
-  export async function has(
-    endpoint: "skills",
-    params: SkillsRequestObject
-  ): Promise<boolean>;
-  export async function has(endpoint, params) {
-    return (await resolve(endpoint, params)) !== undefined;
+  if (record.expires < Date.now()) {
+    store.delete(key);
+    return null;
   }
 
-  export async function clear() {
-    const store = await keya.store("vexdb");
-    return store.clear();
-  }
-
-  /**
-   * Serializes a URL
-   * @param url
-   * @param params
-   */
-  export function serialize(url, params) {
-    let str = "";
-    for (var p in params) {
-      if (params.hasOwnProperty(p)) {
-        if (str !== "") str += "&";
-        str += `${p}=${encodeURIComponent(params[p])}`;
-      }
-    }
-
-    return `${url}?${str}`;
-  }
-
-  /**
-   * Turns endpoint and params into an appropriate Cache URL
-   * @param endpoint
-   * @param params
-   */
-  export function sanitize(endpoint, params) {
-    return serialize(
-      endpoint,
-      Object.keys(params)
-        .filter(key =>
-          validParams[endpoint].includes(key) &&
-          ["string", "number", "boolean"].includes(typeof params[key]) &&
-          key == "limit_start"
-            ? params[key] != 0
-            : true
-        ) // Prevents non-existant key causing duplication
-        .sort() // Prevents order causing duplication
-        .reduce((obj, key) => ((obj[key] = params[key]), obj), {})
-    );
-  }
+  return record.value;
 }

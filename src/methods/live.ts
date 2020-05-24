@@ -13,7 +13,7 @@ import {
   AwardsRequestObject,
   SkillsRequestObject,
   Endpoint,
-  RequestObject
+  RequestObject,
 } from "../constants/RequestObjects";
 import {
   TeamsResponseObject,
@@ -23,9 +23,9 @@ import {
   SeasonRankingsResponseObject,
   AwardsResponseObject,
   SkillsResponseObject,
-  ResponseObject
+  ResponseObject,
 } from "../constants/ResponseObjects";
-import { get } from "./get";
+import get from "./get";
 import { settings } from "../constants/settings";
 
 export interface LiveEventEmitter<Q, R> extends EventEmitter {
@@ -42,47 +42,47 @@ export interface LiveEventEmitter<Q, R> extends EventEmitter {
 
 export type LiveRequestObject<T> = T & { prefetch?: boolean };
 
-export function live(
+export default function live(
   endpoint: "teams",
   params: LiveRequestObject<TeamsRequestObject>
 ): LiveEventEmitter<TeamsRequestObject, TeamsResponseObject>;
 
-export function live(
+export default function live(
   endpoint: "events",
   params: LiveRequestObject<EventsRequestObject>
 ): LiveEventEmitter<EventsRequestObject, EventsResponseObject>;
 
-export function live(
+export default function live(
   endpoint: "matches",
   params: LiveRequestObject<MatchesRequestObject>
 ): LiveEventEmitter<MatchesRequestObject, MatchesResponseObject>;
 
-export function live(
+export default function live(
   endpoint: "rankings",
   params: LiveRequestObject<RankingsRequestObject>
 ): LiveEventEmitter<RankingsRequestObject, RankingsResponseObject>;
 
-export function live(
+export default function live(
   endpoint: "season_rankings",
   params: LiveRequestObject<SeasonRankingsRequestObject>
 ): LiveEventEmitter<SeasonRankingsRequestObject, SeasonRankingsResponseObject>;
 
-export function live(
+export default function live(
   endpoint: "awards",
   params: LiveRequestObject<AwardsRequestObject>
 ): LiveEventEmitter<AwardsRequestObject, AwardsResponseObject>;
 
-export function live(
+export default function live(
   endpoint: "skills",
   params: LiveRequestObject<SkillsRequestObject>
 ): LiveEventEmitter<SkillsRequestObject, SkillsResponseObject>;
 
-export function live(
+export default function live(
   endpoint: string,
   params: LiveRequestObject<RequestObject>
 ): LiveEventEmitter<RequestObject, ResponseObject>;
 
-export function live(endpoint, params) {
+export default function live(endpoint, params) {
   let results = [],
     keys = [],
     emitter = new EventEmitter();
@@ -93,9 +93,9 @@ export function live(endpoint, params) {
         (e, i) => keys.indexOf(JSON.stringify(e)) === -1
       );
 
-    newItems.forEach(item => emitter.emit("item", item));
+    newItems.forEach((item) => emitter.emit("item", item));
     results = incoming;
-    keys = incoming.map(a => JSON.stringify(a));
+    keys = incoming.map((a) => JSON.stringify(a));
     emitter.emit("fetch", newItems);
     return true;
   }
@@ -106,7 +106,7 @@ export function live(endpoint, params) {
     if (!params.prefetch) return;
 
     (results = await get(endpoint, params)),
-      (keys = results.map(a => JSON.stringify(a)));
+      (keys = results.map((a) => JSON.stringify(a)));
     emitter.emit("prefetch", results);
   }, 0);
 
@@ -124,6 +124,6 @@ export function live(endpoint, params) {
     current() {
       return results;
     },
-    fetch
+    fetch,
   });
 }

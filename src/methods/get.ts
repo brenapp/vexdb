@@ -1,6 +1,9 @@
 /**
- * Contains more advanced filtering logic to allow for lots of versatillity
+ * Typesafe, Cache Respecting, Filterable GET function
+ *
  */
+
+import requestAll from "./request";
 
 import {
   TeamsRequestObject,
@@ -10,9 +13,7 @@ import {
   SeasonRankingsRequestObject,
   AwardsRequestObject,
   SkillsRequestObject,
-  Endpoint,
-  RequestObject,
-  validParams
+  validParams,
 } from "../constants/RequestObjects";
 
 import {
@@ -23,159 +24,173 @@ import {
   SeasonRankingsResponseObject,
   AwardsResponseObject,
   SkillsResponseObject,
-  ResponseObject
 } from "../constants/ResponseObjects";
 
-import { endpoints } from "../constants/RequestObjects";
-import { settings } from "../constants/settings";
-import permutations from "../util/permutations";
-import { filter, asyncArrayFilter } from "../util/object";
-import request, { requestAll, requestSize } from "./request";
-import applyFilter from "../util/filter";
+export function permute<I extends { [key: string]: string[] }>(
+  permutations: I
+) {
+  const permutators = Object.keys(permutations);
 
-function standardize(endpoint, params) {
-  return filter(params, (value, key) => validParams[endpoint].includes(key));
+  const lengths: number[] = permutators.map((key) => permutations[key].length);
+  const sizes = new Array(permutators.length + 1)
+    .fill(0)
+    .map((a, i) => lengths.slice(i).reduce((a, b) => a * b, 1));
+
+  return (
+    new Array(sizes[0])
+      .fill({})
+      .map((a, i) =>
+        // Now we generate a "path" to traverse given our index, which is used as a resource measure
+        // Basically, for each level of the sizes array, we pick the furthest size given current "resources"
+        // Then we subtract for the next level of sizes.
+        // Since sizes contains the exact number of permutators + 1, this will generate an array of paths (array of number)
+        sizes
+          .slice(1) // Skip the first size, which is a meta size (total number of permutations)
+          .map((cost) => {
+            // Given our currently available resources, which one can we access? Flooring to ensure we never pass nodes we can't
+            let path = Math.floor(i / cost);
+            // Lose the number of passed nodes
+            i -= cost * path;
+            return path;
+          })
+      )
+      // Now that we have generated our path, we need to use it to generate the appropriate object
+      // Basically, go through each item in the path, and convert it to its corresponding key and value based on the current index
+      .map((path) =>
+        path
+          .map((t, i) => ({
+            [permutators[i]]: permutations[permutators[i]][t],
+          }))
+          .reduce((a, b) => Object.assign({}, a, b), permutations)
+      )
+  );
 }
 
-export function get(
+export default async function get(
   endpoint: "teams",
   params: TeamsRequestObject
 ): Promise<TeamsResponseObject[]>;
 
-export function get(
+export default async function get(
   endpoint: "events",
   params: EventsRequestObject
 ): Promise<EventsResponseObject[]>;
 
-export function get(
+export default async function get(
   endpoint: "matches",
   params: MatchesRequestObject
 ): Promise<MatchesResponseObject[]>;
 
-export function get(
+export default async function get(
   endpoint: "rankings",
   params: RankingsRequestObject
 ): Promise<RankingsResponseObject[]>;
 
-export function get(
+export default async function get(
   endpoint: "season_rankings",
   params: SeasonRankingsRequestObject
 ): Promise<SeasonRankingsResponseObject[]>;
 
-export function get(
+export default async function get(
   endpoint: "awards",
   params: AwardsRequestObject
 ): Promise<AwardsResponseObject[]>;
 
-export function get(
+export default async function get(
   endpoint: "skills",
   params: SkillsRequestObject
 ): Promise<SkillsResponseObject[]>;
 
-export async function get(endpoint, params = {}): Promise<ResponseObject[]> {
-  // Even though we're typescript, users of the module will not be, we should manually check endpoints
-  if (!endpoints.includes(endpoint))
+export default async function get(endpoint, params) {
+  const endpoints = Object.keys(validParams);
+
+  if (!endpoints.includes(endpoint)) {
     return Promise.reject(
-      new RangeError(
-        `Endpoint ${endpoint} not known. Valid endpoints are ${endpoints.join(
+      new Error(
+        `Endpoint "${endpoint}" is not valid. Valid endpoints are ${endpoints.join(
           ", "
         )}`
       )
     );
-
-  // Assign defaults
-  params = Object.assign({}, settings.params, params);
-
-  // There are 3 types of parameters that can be passed to .get():
-  // Those which can be directly passed to VexDB,
-  // Those which require us to make extra requests,
-  // Those which require us to make a broad request, and filter on the client side
-
-  // First, we'll make all the requests we need, by
-  // generating all possible permutations of passed
-  // arrays. See util/permutations.ts for more information
-  let res: ResponseObject[] = (await Promise.all(
-    permutations(endpoint, params).map(param =>
-      requestAll(endpoint, standardize(endpoint, param)).then(res => res.result)
-    )
-  )).reduce((a, b) => a.concat(b), []); // Flatten list of responses into one
-
-  // Next, uniquify the results
-  // Do this with a set
-  res = [...new Set(res)];
-
-  // Finally, do post request client-side filtering
-  // First, let's get all of the parameters that require client-side filtering
-  let clientside = filter(
-    params,
-    (value, key) =>
-      (typeof value == "function" || typeof value === "object") &&
-      !validParams[endpoint].includes(key)
-  );
-  let filterKeys = Object.keys(clientside);
-
-  const indices = (await Promise.all(
-    res.map(item =>
-      Promise.all([
-        ...filterKeys.map(key => applyFilter(item, key, params[key]))
-      ])
-    )
-  )).map(r => r.every(a => a));
-
-  return res.filter((v, i) => indices[i]);
-}
-
-export function size(
-  endpoint: "teams",
-  params: TeamsRequestObject
-): Promise<number>;
-
-export function size(
-  endpoint: "events",
-  params: EventsRequestObject
-): Promise<number>;
-
-export function size(
-  endpoint: "matches",
-  params: MatchesRequestObject
-): Promise<number>;
-
-export function size(
-  endpoint: "rankings",
-  params: RankingsRequestObject
-): Promise<number>;
-
-export function size(
-  endpoint: "season_rankings",
-  params: SeasonRankingsRequestObject
-): Promise<number>;
-
-export function size(
-  endpoint: "awards",
-  params: AwardsRequestObject
-): Promise<number>;
-
-export function size(
-  endpoint: "skills",
-  params: SkillsRequestObject
-): Promise<number>;
-
-export function size(endpoint: string, params: RequestObject): Promise<number>;
-export async function size(endpoint, params = {}): Promise<number> {
-  // If there's client-side filtering, then we actually have to make each request, else, we can just stick nodata on everything
-  const filtering = Object.keys(params).some(
-    key => !validParams[endpoint].includes(key)
-  );
-
-  if (filtering) {
-    // TypeScript sometimes has troubles with string unions
-    return get(endpoint as any, params).then(res => res.length);
-  } else {
-    return (await Promise.all(
-      permutations(endpoint, params).map(param =>
-        requestSize(endpoint, Object.assign({}, settings.params, param))
-      )
-      // Sum each request
-    )).reduce((a, b) => a + b);
   }
+
+  /**
+   * Now we need to sort parameters into the following categories
+   * 1) The set of parameters we can pass directly to vexdb
+   * 2) The set of parameters we need to filter for after requests are made
+   * 3) The set of parameters which we need to generate extra requests for
+   *
+   * The ones that can be passed directly to vexdb are the simplest:
+   *  - Are in validParams
+   *  - Are only strings or numbers
+   */
+
+  // Basic parameters (those that can be directly passed)
+  let basic = {};
+
+  // Post Request Filters
+  let filter = new Map<
+    string,
+    (t: string | number, value: any) => boolean | Promise<boolean>
+  >();
+
+  // Permutation filters
+  let permuation = {};
+
+  /**
+   * Parameter classification
+   */
+
+  for (let [key, value] of Object.entries(params)) {
+    // If it's a basic parameter (i.e. a string or a number) add it to the basics
+    if (typeof value === "number" || typeof value === "string") {
+      basic[key] = value;
+      continue;
+    }
+
+    // Arrays need extra permutations
+    if (value instanceof Array) {
+      permuation[key] = value;
+      continue;
+    }
+
+    // Transform RegExp into functions
+    if (value instanceof RegExp) {
+      const regex = value;
+      value = (res) =>
+        (res as number | string).toString().match(regex) !== null;
+    }
+
+    // Finally, set all post request filters
+    filter.set(key, value as any);
+  }
+
+  /**
+   * Request Permutation
+   */
+
+  const requests = Promise.all(
+    permute(permuation).map((r) => requestAll(endpoint, { ...basic, ...r }))
+  );
+
+  // Collect responses
+  const responses = (await requests).map((r) => r.result).flat();
+
+  /**
+   * Post Request Filtering
+   */
+  const final = [];
+  for (const response of responses) {
+    const validate = await Promise.all(
+      [...filter.entries()].map(([key, validator]) =>
+        validator(response[key], response)
+      )
+    );
+
+    if (validate.every((r) => !!r)) {
+      final.push(response);
+    }
+  }
+
+  return final;
 }

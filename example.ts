@@ -1,24 +1,11 @@
 import * as vexdb from "./src/main";
-import filter from "./src/util/filter";
 
-async function main() {
-  let teams = await vexdb.get("teams", {
-    number: number => number.startsWith("8686")
-  });
+vexdb
+  .get("teams", {
+    team_name: "Some Assembly Required",
+  })
+  .then(console.log);
 
-  let awards = await vexdb.get("awards", {
-    name: "Tournament Champions (VRC/VEXU)",
-    team: teams.map(a => a.number)
-  });
+vexdb.size("teams", { team_name: "Some Assembly Required" }).then(console.log);
 
-  console.log("THE 8686 ALLIANCE");
-  teams.forEach(team => {
-    console.log(
-      `${team.number} - ${team.team_name} (${team.city}, ${team.region})`
-    );
-  });
-
-  console.log(awards.length);
-}
-
-main();
+vexdb.get("events", { season: "Nothing But Net" }).then(console.log);
