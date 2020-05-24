@@ -1,12 +1,12 @@
-// Methods
-export * from "./methods/get";
-export * from "./methods/cache";
-export * from "./methods/live";
+import request from "./methods/request";
+import * as cache from "./methods/cache";
+import get from "./methods/get";
+import size from "./methods/size";
+import live from "./methods/live";
 
-// Constants
-import * as ReqConstants from "./constants/RequestObjects";
-import * as ResConstants from "./constants/ResponseObjects";
-import * as Constants from "./constants/settings";
-const constant = { ...ReqConstants, ...ResConstants, ...Constants };
+import * as req from "./constants/RequestObjects";
+import * as res from "./constants/ResponseObjects";
+import * as settings from "./constants/settings";
+const constant = { ...req, ...res, ...settings };
 
-export { constant };
+export { request, cache, get, size, live, constant };

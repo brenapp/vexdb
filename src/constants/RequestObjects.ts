@@ -5,7 +5,7 @@ import {
   RankingsResponseObject,
   SeasonRankingsResponseObject,
   AwardsResponseObject,
-  SkillsResponseObject
+  SkillsResponseObject,
 } from "./ResponseObjects";
 
 export type Endpoint =
@@ -17,22 +17,22 @@ export type Endpoint =
   | "awards"
   | "skills";
 
-export type StringRequest<T> =
-  | string
-  | string[]
+export type StringRequest<T, S = string> =
+  | S
+  | S[]
   | RegExp
-  | StringRequestValidatorFunction<T>;
-export type StringRequestValidatorFunction<T> = (
-  itemValue: string,
+  | StringRequestValidatorFunction<T, S>;
+export type StringRequestValidatorFunction<T, S> = (
+  itemValue: S,
   item: T
 ) => Promise<boolean> | boolean;
 
-export type NumberRequest<T> =
-  | number
-  | number[]
-  | NumberRequestValidatorFunction<T>;
-export type NumberRequestValidatorFunction<T> = (
-  itemValue: number,
+export type NumberRequest<T, S = number> =
+  | S
+  | S[]
+  | NumberRequestValidatorFunction<T, S>;
+export type NumberRequestValidatorFunction<T, S> = (
+  itemValue: S,
   item: T
 ) => Promise<boolean> | boolean;
 
@@ -45,32 +45,47 @@ export type RequestObject =
   | AwardsRequestObject
   | SkillsRequestObject;
 
-export interface TeamsRequestObject {
-  single?: boolean;
+export type Seasons =
+  | "Change Up"
+  | "Tower Takeover"
+  | "Turning Point"
+  | "In The Zone"
+  | "StarStruck"
+  | "Nothing But Net"
+  | "Skyrise"
+  | "Toss Up"
+  | "Sack Attack"
+  | "Gateway"
+  | "Round Up"
+  | "Clean Sweep"
+  | "Elevation"
+  | "Bridge Battle";
 
+export interface TeamsRequestObject {
   team?: StringRequest<TeamsResponseObject>;
   number?: StringRequest<TeamsResponseObject>;
   team_name?: StringRequest<TeamsResponseObject>;
   robot_name?: StringRequest<TeamsResponseObject>;
-  program?: StringRequest<TeamsResponseObject>;
+  program?: StringRequest<TeamsResponseObject, "VRC" | "VEXU">;
   organisation?: StringRequest<TeamsResponseObject>;
   city?: StringRequest<TeamsResponseObject>;
   region?: StringRequest<TeamsResponseObject>;
   country?: StringRequest<TeamsResponseObject>;
-  grade?: StringRequest<TeamsResponseObject>;
-  is_registered?: NumberRequest<TeamsResponseObject>;
+  grade?: StringRequest<
+    TeamsResponseObject,
+    "College" | "High School" | "Middle School"
+  >;
+  is_registered?: NumberRequest<TeamsResponseObject, 0 | 1>;
   sku?: StringRequest<TeamsResponseObject>;
   limit_number?: number;
   limit_start?: number;
 }
 
 export interface EventsRequestObject {
-  single?: boolean;
-
   sku?: StringRequest<EventsResponseObject>;
-  program?: StringRequest<EventsResponseObject>;
+  program?: StringRequest<EventsResponseObject, "VRC" | "VEXU">;
   date?: StringRequest<EventsResponseObject>;
-  season?: StringRequest<EventsResponseObject>;
+  season?: StringRequest<EventsResponseObject, Seasons>;
   city?: StringRequest<EventsResponseObject>;
   region?: StringRequest<EventsResponseObject>;
   country?: StringRequest<EventsResponseObject>;
@@ -93,18 +108,16 @@ export interface EventsRequestObject {
 }
 
 export interface MatchesRequestObject {
-  single?: boolean;
-
   sku?: StringRequest<MatchesResponseObject>;
   division?: StringRequest<MatchesResponseObject>;
   team?: StringRequest<MatchesResponseObject>;
-  round?: NumberRequest<MatchesResponseObject>;
+  round?: NumberRequest<MatchesResponseObject, 1 | 2 | 3 | 4 | 5 | 16>;
   instance?: NumberRequest<MatchesResponseObject>;
   matchnum?: NumberRequest<MatchesResponseObject>;
   scheduled?: NumberRequest<MatchesResponseObject>;
   field?: StringRequest<MatchesResponseObject>;
-  scored?: NumberRequest<MatchesResponseObject>;
-  season?: StringRequest<MatchesResponseObject>;
+  scored?: NumberRequest<MatchesResponseObject, 0 | 1>;
+  season?: StringRequest<MatchesResponseObject, Seasons>;
   limit_number?: number;
   limit_start?: number;
 
@@ -121,13 +134,11 @@ export interface MatchesRequestObject {
 }
 
 export interface RankingsRequestObject {
-  single?: boolean;
-
   sku?: StringRequest<RankingsResponseObject>;
   division?: StringRequest<RankingsResponseObject>;
   team?: StringRequest<RankingsResponseObject>;
   rank?: StringRequest<RankingsResponseObject>;
-  season?: StringRequest<RankingsResponseObject>;
+  season?: StringRequest<RankingsResponseObject, Seasons>;
   limit_number?: number;
   limit_start?: number;
 
@@ -145,10 +156,8 @@ export interface RankingsRequestObject {
 }
 
 export interface SeasonRankingsRequestObject {
-  single?: boolean;
-
-  program?: StringRequest<SeasonRankingsResponseObject>;
-  season?: StringRequest<SeasonRankingsResponseObject>;
+  program?: StringRequest<SeasonRankingsResponseObject, "VRC" | "VEXU">;
+  season?: StringRequest<SeasonRankingsResponseObject, Seasons>;
   team?: StringRequest<SeasonRankingsResponseObject>;
   vrating_rank?: NumberRequest<SeasonRankingsResponseObject>;
   limit_number?: number;
@@ -158,12 +167,10 @@ export interface SeasonRankingsRequestObject {
 }
 
 export interface AwardsRequestObject {
-  single?: boolean;
-
   sku?: StringRequest<AwardsResponseObject>;
   name?: StringRequest<AwardsResponseObject>;
   team?: StringRequest<AwardsResponseObject>;
-  season?: StringRequest<AwardsResponseObject>;
+  season?: StringRequest<AwardsResponseObject, Seasons>;
   limit_number?: number;
   limit_start?: number;
 
@@ -171,13 +178,11 @@ export interface AwardsRequestObject {
 }
 
 export interface SkillsRequestObject {
-  single?: boolean;
-
   sku?: StringRequest<SkillsResponseObject>;
-  program?: StringRequest<SkillsResponseObject>;
-  type?: NumberRequest<SkillsResponseObject>;
+  program?: StringRequest<SkillsResponseObject, "VRC" | "VEXU">;
+  type?: NumberRequest<SkillsResponseObject, 0 | 1 | 2>;
   team?: StringRequest<SkillsResponseObject>;
-  season?: StringRequest<SkillsResponseObject>;
+  season?: StringRequest<SkillsResponseObject, Seasons>;
   rank?: NumberRequest<SkillsResponseObject>;
   season_rank?: NumberRequest<SkillsResponseObject>;
   limit_number?: number;
@@ -194,12 +199,11 @@ export const endpoints: Endpoint[] = [
   "rankings",
   "season_rankings",
   "awards",
-  "skills"
+  "skills",
 ];
 
 export const validParams = {
   events: [
-    "single",
     "sku",
     "program",
     "date",
@@ -211,10 +215,9 @@ export const validParams = {
     "status",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   teams: [
-    "single",
     "team",
     "program",
     "organisation",
@@ -226,10 +229,9 @@ export const validParams = {
     "sku",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   matches: [
-    "single",
     "sku",
     "division",
     "team",
@@ -242,10 +244,9 @@ export const validParams = {
     "season",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   rankings: [
-    "single",
     "sku",
     "division",
     "team",
@@ -253,30 +254,27 @@ export const validParams = {
     "season",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   season_rankings: [
-    "single",
     "program",
     "season",
     "team",
     "vrating_rank",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   awards: [
-    "single",
     "sku",
     "name",
     "team",
     "season",
     "limit_number",
     "limit_start",
-    "nodata"
+    "nodata",
   ],
   skills: [
-    "single",
     "sku",
     "program",
     "type",
@@ -286,6 +284,6 @@ export const validParams = {
     "season_rank",
     "limit_number",
     "limit_start",
-    "nodata"
-  ]
+    "nodata",
+  ],
 };

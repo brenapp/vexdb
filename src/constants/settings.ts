@@ -18,16 +18,16 @@ interface settings {
 
 let settings: settings = {
   cache: {
-    ttl: 4 * 60 * 1000
+    ttl: 4 * 60 * 1000,
   },
   headers: {
-    "User-Agent": "vexdb (nodejs)"
+    "User-Agent": "vexdb (nodejs)",
   },
   params: {},
-  baseURL: "https://api.vexdb.io/v1/",
+  baseURL: "https://api.vexdb.io/v1",
   live: {
-    pollTime: 10 * 1000
-  }
+    pollTime: 10 * 1000,
+  },
 };
 
 export { settings };
