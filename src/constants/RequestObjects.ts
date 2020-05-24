@@ -27,12 +27,12 @@ export type StringRequestValidatorFunction<T, S> = (
   item: T
 ) => Promise<boolean> | boolean;
 
-export type NumberRequest<T> =
-  | number
-  | number[]
-  | NumberRequestValidatorFunction<T>;
-export type NumberRequestValidatorFunction<T> = (
-  itemValue: number,
+export type NumberRequest<T, S = number> =
+  | S
+  | S[]
+  | NumberRequestValidatorFunction<T, S>;
+export type NumberRequestValidatorFunction<T, S> = (
+  itemValue: S,
   item: T
 ) => Promise<boolean> | boolean;
 
@@ -75,7 +75,7 @@ export interface TeamsRequestObject {
     TeamsResponseObject,
     "College" | "High School" | "Middle School"
   >;
-  is_registered?: NumberRequest<TeamsResponseObject>;
+  is_registered?: NumberRequest<TeamsResponseObject, 0 | 1>;
   sku?: StringRequest<TeamsResponseObject>;
   limit_number?: number;
   limit_start?: number;
@@ -111,12 +111,12 @@ export interface MatchesRequestObject {
   sku?: StringRequest<MatchesResponseObject>;
   division?: StringRequest<MatchesResponseObject>;
   team?: StringRequest<MatchesResponseObject>;
-  round?: NumberRequest<MatchesResponseObject>;
+  round?: NumberRequest<MatchesResponseObject, 1 | 2 | 3 | 4 | 5 | 16>;
   instance?: NumberRequest<MatchesResponseObject>;
   matchnum?: NumberRequest<MatchesResponseObject>;
   scheduled?: NumberRequest<MatchesResponseObject>;
   field?: StringRequest<MatchesResponseObject>;
-  scored?: NumberRequest<MatchesResponseObject>;
+  scored?: NumberRequest<MatchesResponseObject, 0 | 1>;
   season?: StringRequest<MatchesResponseObject, Seasons>;
   limit_number?: number;
   limit_start?: number;
@@ -180,7 +180,7 @@ export interface AwardsRequestObject {
 export interface SkillsRequestObject {
   sku?: StringRequest<SkillsResponseObject>;
   program?: StringRequest<SkillsResponseObject, "VRC" | "VEXU">;
-  type?: NumberRequest<SkillsResponseObject>;
+  type?: NumberRequest<SkillsResponseObject, 0 | 1 | 2>;
   team?: StringRequest<SkillsResponseObject>;
   season?: StringRequest<SkillsResponseObject, Seasons>;
   rank?: NumberRequest<SkillsResponseObject>;
