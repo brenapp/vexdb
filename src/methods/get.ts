@@ -3,7 +3,7 @@
  *
  */
 
-import { requestAll } from "./request";
+import requestAll from "./request";
 
 import {
   TeamsRequestObject,
@@ -24,101 +24,173 @@ import {
   SeasonRankingsResponseObject,
   AwardsResponseObject,
   SkillsResponseObject,
-  ResponseObject,
 } from "../constants/ResponseObjects";
 
-export async function get(
+export function permute<I extends { [key: string]: string[] }>(
+  permutations: I
+) {
+  const permutators = Object.keys(permutations);
+
+  const lengths: number[] = permutators.map((key) => permutations[key].length);
+  const sizes = new Array(permutators.length + 1)
+    .fill(0)
+    .map((a, i) => lengths.slice(i).reduce((a, b) => a * b, 1));
+
+  return (
+    new Array(sizes[0])
+      .fill({})
+      .map((a, i) =>
+        // Now we generate a "path" to traverse given our index, which is used as a resource measure
+        // Basically, for each level of the sizes array, we pick the furthest size given current "resources"
+        // Then we subtract for the next level of sizes.
+        // Since sizes contains the exact number of permutators + 1, this will generate an array of paths (array of number)
+        sizes
+          .slice(1) // Skip the first size, which is a meta size (total number of permutations)
+          .map((cost) => {
+            // Given our currently available resources, which one can we access? Flooring to ensure we never pass nodes we can't
+            let path = Math.floor(i / cost);
+            // Lose the number of passed nodes
+            i -= cost * path;
+            return path;
+          })
+      )
+      // Now that we have generated our path, we need to use it to generate the appropriate object
+      // Basically, go through each item in the path, and convert it to its corresponding key and value based on the current index
+      .map((path) =>
+        path
+          .map((t, i) => ({
+            [permutators[i]]: permutations[permutators[i]][t],
+          }))
+          .reduce((a, b) => Object.assign({}, a, b), permutations)
+      )
+  );
+}
+
+export default async function get(
   endpoint: "teams",
   params: TeamsRequestObject
 ): Promise<TeamsResponseObject[]>;
 
-export async function get(
+export default async function get(
   endpoint: "events",
   params: EventsRequestObject
 ): Promise<EventsResponseObject[]>;
 
-export async function get(
+export default async function get(
   endpoint: "matches",
   params: MatchesRequestObject
 ): Promise<MatchesResponseObject[]>;
 
-export async function get(
+export default async function get(
   endpoint: "rankings",
   params: RankingsRequestObject
 ): Promise<RankingsResponseObject[]>;
 
-export async function get(
+export default async function get(
   endpoint: "season_rankings",
   params: SeasonRankingsRequestObject
 ): Promise<SeasonRankingsResponseObject[]>;
 
-export async function get(
+export default async function get(
   endpoint: "awards",
   params: AwardsRequestObject
 ): Promise<AwardsResponseObject[]>;
 
-export async function get(
+export default async function get(
   endpoint: "skills",
   params: SkillsRequestObject
 ): Promise<SkillsResponseObject[]>;
 
 export default async function get(endpoint, params) {
-  // Parameters can be of the following types
-  // 1. Number
-  // 2. String
-  // 3. Regex
-  // 4. Function
-  // 5. Array of Valid Cases
-  // So for most cases, we need to figure out what parameters we can pass *directly* to vexdb, and what needs some sort of processing
+  const endpoints = Object.keys(validParams);
 
-  const direct = {};
+  if (!endpoints.includes(endpoint)) {
+    return Promise.reject(
+      new Error(
+        `Endpoint "${endpoint}" is not valid. Valid endpoints are ${endpoints.join(
+          ", "
+        )}`
+      )
+    );
+  }
 
-  // Processing functions are standardized as pass the result, get a yes or no back
-  const processing: ((
-    result: ResponseObject
-  ) => boolean | Promise<boolean>)[] = [];
+  /**
+   * Now we need to sort parameters into the following categories
+   * 1) The set of parameters we can pass directly to vexdb
+   * 2) The set of parameters we need to filter for after requests are made
+   * 3) The set of parameters which we need to generate extra requests for
+   *
+   * The ones that can be passed directly to vexdb are the simplest:
+   *  - Are in validParams
+   *  - Are only strings or numbers
+   */
 
-  const valid = (p: string) => validParams[endpoint].includes(p);
+  // Basic parameters (those that can be directly passed)
+  let basic = {};
 
-  // Sort parameters into compatabile and ones that require us to add post-request filter functions
-  for (let key in params) {
-    // Passed functions are definitely need to be handled afterwards
-    if (params[key] instanceof Function) {
-      processing.push((result) => params[key](result[key], result));
+  // Post Request Filters
+  let filter = new Map<
+    string,
+    (t: string | number, value: any) => boolean | Promise<boolean>
+  >();
+
+  // Permutation filters
+  let permuation = {};
+
+  /**
+   * Parameter classification
+   */
+
+  for (let [key, value] of Object.entries(params)) {
+    // If it's a basic parameter (i.e. a string or a number) add it to the basics
+    if (typeof value === "number" || typeof value === "string") {
+      basic[key] = value;
+      continue;
     }
 
-    // If the parameter is a regex, create a post function
-    else if (
-      Object.prototype.toString.call(params[key]) === "[object RegExp]"
-    ) {
-      processing.push((result) => params[key].test(result[key]));
+    // Arrays need extra permutations
+    if (value instanceof Array) {
+      permuation[key] = value;
+      continue;
     }
 
-    // Arrays
-    else if (params[key] instanceof Array) {
-      processing.push((result) => params[key].includes(result[key]));
+    // Transform RegExp into functions
+    if (value instanceof RegExp) {
+      const regex = value;
+      value = (res) =>
+        (res as number | string).toString().match(regex) !== null;
     }
 
-    // Now it's just strings and numbers, which are conditional based on whether vexdb accepts them as arguments
-    else if (valid(key)) {
-      direct[key] = params[key];
-    } else {
-      processing.push((result) => params[key] === result[key]);
+    // Finally, set all post request filters
+    filter.set(key, value as any);
+  }
+
+  /**
+   * Request Permutation
+   */
+
+  const requests = Promise.all(
+    permute(permuation).map((r) => requestAll(endpoint, { ...basic, ...r }))
+  );
+
+  // Collect responses
+  const responses = (await requests).map((r) => r.result).flat();
+
+  /**
+   * Post Request Filtering
+   */
+  const final = [];
+  for (const response of responses) {
+    const validate = await Promise.all(
+      [...filter.entries()].map(([key, validator]) =>
+        validator(response[key], response)
+      )
+    );
+
+    if (validate.every((r) => !!r)) {
+      final.push(response);
     }
   }
 
-  // This'll reject if the req.status != 1
-  const req = await requestAll(endpoint, direct);
-
-  // Creates a super filter function, that tests every filter function for a given result
-  const filter = (result) =>
-    Promise.all(processing.map((fn) => fn(result))).then((results) =>
-      results.every((v) => v)
-    );
-
-  // Filter all of the results through the super filter function
-  const include = await Promise.all(req.result.map(filter));
-
-  // Return only the values that pass through the super filter
-  return req.result.filter((v, i) => include[i]);
+  return final;
 }
