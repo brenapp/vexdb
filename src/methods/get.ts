@@ -84,14 +84,5 @@ export default async function get(
     return Promise.reject(response);
   }
 
-  // Now we can go through all the other parameters and filter out everything that vexdb can't handle
-  let results = response.result;
-
-  for (const param of Object.keys(params)) {
-    const passable: boolean = passableParams[endpoint].includes(param);
-
-    results = results.filter((r) => r[param] === params[param]);
-  }
-
-  return results;
+  return response.result;
 }

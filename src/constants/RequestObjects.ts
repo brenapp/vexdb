@@ -58,10 +58,10 @@ export interface TeamsRequestObject {
   country?: string;
   grade?: Grades;
 
-  is_registered?: 0 | 1;
-  sku?: string;
-  limit_number?: number;
-  limit_start?: number;
+  // is_registered?: 0 | 1;
+  // sku?: string;
+  // limit_number?: number;
+  // limit_start?: number;
 }
 
 export interface EventsRequestObject {
@@ -77,17 +77,17 @@ export interface EventsRequestObject {
   limit_start?: number;
   team?: string;
 
-  key?: string;
-  name?: string;
-  loc_venue?: string;
-  loc_address1?: string;
-  loc_address2?: string;
-  loc_city?: string;
-  loc_region?: string;
-  loc_postcode?: string;
-  loc_country?: string;
-  start?: string;
-  end?: string;
+  // key?: string;
+  // name?: string;
+  // loc_venue?: string;
+  // loc_address1?: string;
+  // loc_address2?: string;
+  // loc_city?: string;
+  // loc_region?: string;
+  // loc_postcode?: string;
+  // loc_country?: string;
+  // start?: string;
+  // end?: string;
 }
 
 export interface MatchesRequestObject {
@@ -104,16 +104,16 @@ export interface MatchesRequestObject {
   limit_number?: number;
   limit_start?: number;
 
-  red1?: string;
-  red2?: string;
-  red3?: string;
-  redsit?: string;
-  blue1?: string;
-  blue2?: string;
-  blue3?: string;
-  bluesit?: string;
-  redscore?: number;
-  bluescore?: number;
+  // red1?: string;
+  // red2?: string;
+  // red3?: string;
+  // redsit?: string;
+  // blue1?: string;
+  // blue2?: string;
+  // blue3?: string;
+  // bluesit?: string;
+  // redscore?: number;
+  // bluescore?: number;
 }
 
 export interface RankingsRequestObject {
@@ -125,17 +125,17 @@ export interface RankingsRequestObject {
   limit_number?: number;
   limit_start?: number;
 
-  wins?: number;
-  losses?: number;
-  ties?: number;
-  wp?: number;
-  ap?: number;
-  sp?: number;
-  trsp?: number;
-  max_score?: number;
-  opr?: number;
-  dpr?: number;
-  ccwm?: number;
+  // wins?: number;
+  // losses?: number;
+  // ties?: number;
+  // wp?: number;
+  // ap?: number;
+  // sp?: number;
+  // trsp?: number;
+  // max_score?: number;
+  // opr?: number;
+  // dpr?: number;
+  // ccwm?: number;
 }
 
 export interface SeasonRankingsRequestObject {
@@ -146,7 +146,7 @@ export interface SeasonRankingsRequestObject {
   limit_number?: number;
   limit_start?: number;
 
-  vrating?: number;
+  // vrating?: number;
 }
 
 export interface AwardsRequestObject {
@@ -157,7 +157,7 @@ export interface AwardsRequestObject {
   limit_number?: number;
   limit_start?: number;
 
-  order?: number;
+  // order?: number;
 }
 
 export enum SkillsType {
@@ -177,8 +177,8 @@ export interface SkillsRequestObject {
   limit_number?: number;
   limit_start?: number;
 
-  attempts?: number;
-  score?: number;
+  // attempts?: number;
+  // score?: number;
 }
 
 export const endpoints: Endpoint[] = [
