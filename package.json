@@ -1,6 +1,6 @@
 {
   "name": "vexdb",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A simple tool for accessing the VexDB",
   "main": "./out/main.js",
   "typings": "./out/main.d.ts",
