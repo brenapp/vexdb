@@ -5,7 +5,7 @@ export declare type StringRequestValidatorFunction<T, S> = (itemValue: S, item: 
 export declare type NumberRequest<T, S = number> = S | S[] | NumberRequestValidatorFunction<T, S>;
 export declare type NumberRequestValidatorFunction<T, S> = (itemValue: S, item: T) => Promise<boolean> | boolean;
 export declare type RequestObject = TeamsRequestObject | EventsRequestObject | MatchesRequestObject | RankingsRequestObject | SeasonRankingsRequestObject | AwardsRequestObject | SkillsRequestObject;
-export declare type Seasons = "Change Up" | "Tower Takeover" | "Turning Point" | "In The Zone" | "StarStruck" | "Nothing But Net" | "Skyrise" | "Toss Up" | "Sack Attack" | "Gateway" | "Round Up" | "Clean Sweep" | "Elevation" | "Bridge Battle";
+export declare type Seasons = "Change Up" | "Tower Takeover" | "Turning Point" | "In The Zone" | "StarStruck" | "Nothing But Net" | "Skyrise" | "Toss Up" | "Sack Attack" | "Gateway" | "Round Up" | "Clean Sweep" | "Elevation" | "Bridge Battle" | "current";
 export interface TeamsRequestObject {
     team?: StringRequest<TeamsResponseObject>;
     number?: StringRequest<TeamsResponseObject>;
