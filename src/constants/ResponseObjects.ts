@@ -2,6 +2,8 @@
  * Response Objects
  */
 
+import { SkillsType, Seasons, Programs, Grades } from "./RequestObjects";
+
 export type ResponseObject =
   | TeamsResponseObject
   | EventsResponseObject
@@ -13,21 +15,21 @@ export type ResponseObject =
 
 export interface TeamsResponseObject {
   number: string;
-  program: string;
+  program: Programs;
   team_name: string;
   robot_name: string;
   organisation: string;
   city: string;
   region: string;
   country: string;
-  grade: string;
+  grade: Grades;
   is_registered: 0 | 1;
 }
 
 export interface EventsResponseObject {
   sku: string;
   key: string;
-  program: string;
+  program: Programs;
   name: string;
   loc_venue: string;
   loc_address1: string;
@@ -36,7 +38,7 @@ export interface EventsResponseObject {
   loc_region: string;
   loc_postcode: string;
   loc_country: string;
-  season: string;
+  season: Seasons;
   start: string;
   end: string;
   divisions: string[];
@@ -83,8 +85,8 @@ export interface RankingsResponseObject {
 
 export interface SeasonRankingsResponseObject {
   team: string;
-  season: string;
-  program: string;
+  season: Seasons;
+  program: Programs;
   vrating_rank: number;
   vrating: number;
 }
@@ -99,10 +101,10 @@ export interface AwardsResponseObject {
 
 export interface SkillsResponseObject {
   sku: string;
-  type: number;
+  type: SkillsType;
   rank: number;
   team: string;
-  program: string;
+  program: Programs;
   attempts: number;
   score: number;
 }

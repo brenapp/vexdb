@@ -17,25 +17,6 @@ export type Endpoint =
   | "awards"
   | "skills";
 
-export type StringRequest<T, S = string> =
-  | S
-  | S[]
-  | RegExp
-  | StringRequestValidatorFunction<T, S>;
-export type StringRequestValidatorFunction<T, S> = (
-  itemValue: S,
-  item: T
-) => Promise<boolean> | boolean;
-
-export type NumberRequest<T, S = number> =
-  | S
-  | S[]
-  | NumberRequestValidatorFunction<T, S>;
-export type NumberRequestValidatorFunction<T, S> = (
-  itemValue: S,
-  item: T
-) => Promise<boolean> | boolean;
-
 export type RequestObject =
   | TeamsRequestObject
   | EventsRequestObject
@@ -62,135 +43,142 @@ export type Seasons =
   | "Bridge Battle"
   | "current";
 
+export type Grades = "Middle School" | "High School" | "Collge";
+export type Programs = "VEXU" | "VRC";
+
 export interface TeamsRequestObject {
-  team?: StringRequest<TeamsResponseObject>;
-  number?: StringRequest<TeamsResponseObject>;
-  team_name?: StringRequest<TeamsResponseObject>;
-  robot_name?: StringRequest<TeamsResponseObject>;
-  program?: StringRequest<TeamsResponseObject, "VRC" | "VEXU">;
-  organisation?: StringRequest<TeamsResponseObject>;
-  city?: StringRequest<TeamsResponseObject>;
-  region?: StringRequest<TeamsResponseObject>;
-  country?: StringRequest<TeamsResponseObject>;
-  grade?: StringRequest<
-    TeamsResponseObject,
-    "College" | "High School" | "Middle School"
-  >;
-  is_registered?: NumberRequest<TeamsResponseObject, 0 | 1>;
-  sku?: StringRequest<TeamsResponseObject>;
+  team?: string;
+  number?: string;
+  team_name?: string;
+  robot_name?: string;
+  program?: Programs;
+  organisation?: string;
+  city?: string;
+  region?: string;
+  country?: string;
+  grade?: Grades;
+
+  is_registered?: 0 | 1;
+  sku?: string;
   limit_number?: number;
   limit_start?: number;
 }
 
 export interface EventsRequestObject {
-  sku?: StringRequest<EventsResponseObject>;
-  program?: StringRequest<EventsResponseObject, "VRC" | "VEXU">;
-  date?: StringRequest<EventsResponseObject>;
-  season?: StringRequest<EventsResponseObject, Seasons>;
-  city?: StringRequest<EventsResponseObject>;
-  region?: StringRequest<EventsResponseObject>;
-  country?: StringRequest<EventsResponseObject>;
-  status?: StringRequest<EventsResponseObject>;
+  sku?: string;
+  program?: Programs;
+  date?: string;
+  season?: Seasons;
+  city?: string;
+  region?: string;
+  country?: string;
+  status?: string;
   limit_number?: number;
   limit_start?: number;
   team?: string;
 
-  key?: StringRequest<EventsResponseObject>;
-  name?: StringRequest<EventsResponseObject>;
-  loc_venue?: StringRequest<EventsResponseObject>;
-  loc_address1?: StringRequest<EventsResponseObject>;
-  loc_address2?: StringRequest<EventsResponseObject>;
-  loc_city?: StringRequest<EventsResponseObject>;
-  loc_region?: StringRequest<EventsResponseObject>;
-  loc_postcode?: StringRequest<EventsResponseObject>;
-  loc_country?: StringRequest<EventsResponseObject>;
-  start?: StringRequest<EventsResponseObject>;
-  end?: StringRequest<EventsResponseObject>;
+  key?: string;
+  name?: string;
+  loc_venue?: string;
+  loc_address1?: string;
+  loc_address2?: string;
+  loc_city?: string;
+  loc_region?: string;
+  loc_postcode?: string;
+  loc_country?: string;
+  start?: string;
+  end?: string;
 }
 
 export interface MatchesRequestObject {
-  sku?: StringRequest<MatchesResponseObject>;
-  division?: StringRequest<MatchesResponseObject>;
-  team?: StringRequest<MatchesResponseObject>;
-  round?: NumberRequest<MatchesResponseObject, 1 | 2 | 3 | 4 | 5 | 16>;
-  instance?: NumberRequest<MatchesResponseObject>;
-  matchnum?: NumberRequest<MatchesResponseObject>;
-  scheduled?: NumberRequest<MatchesResponseObject>;
-  field?: StringRequest<MatchesResponseObject>;
-  scored?: NumberRequest<MatchesResponseObject, 0 | 1>;
-  season?: StringRequest<MatchesResponseObject, Seasons>;
+  sku?: string;
+  division?: string;
+  team?: string;
+  round?: 1 | 2 | 3 | 4 | 5 | 16;
+  instance?: number;
+  matchnum?: number;
+  scheduled?: number;
+  field?: string;
+  scored?: 0 | 1;
+  season?: Seasons;
   limit_number?: number;
   limit_start?: number;
 
-  red1?: StringRequest<MatchesResponseObject>;
-  red2?: StringRequest<MatchesResponseObject>;
-  red3?: StringRequest<MatchesResponseObject>;
-  redsit?: StringRequest<MatchesResponseObject>;
-  blue1?: StringRequest<MatchesResponseObject>;
-  blue2?: StringRequest<MatchesResponseObject>;
-  blue3?: StringRequest<MatchesResponseObject>;
-  bluesit?: StringRequest<MatchesResponseObject>;
-  redscore?: NumberRequest<MatchesResponseObject>;
-  bluescore?: NumberRequest<MatchesResponseObject>;
+  red1?: string;
+  red2?: string;
+  red3?: string;
+  redsit?: string;
+  blue1?: string;
+  blue2?: string;
+  blue3?: string;
+  bluesit?: string;
+  redscore?: number;
+  bluescore?: number;
 }
 
 export interface RankingsRequestObject {
-  sku?: StringRequest<RankingsResponseObject>;
-  division?: StringRequest<RankingsResponseObject>;
-  team?: StringRequest<RankingsResponseObject>;
-  rank?: StringRequest<RankingsResponseObject>;
-  season?: StringRequest<RankingsResponseObject, Seasons>;
+  sku?: string;
+  division?: string;
+  team?: string;
+  rank?: string;
+  season?: Seasons;
   limit_number?: number;
   limit_start?: number;
 
-  wins?: NumberRequest<RankingsResponseObject>;
-  losses?: NumberRequest<RankingsResponseObject>;
-  ties?: NumberRequest<RankingsResponseObject>;
-  wp?: NumberRequest<RankingsResponseObject>;
-  ap?: NumberRequest<RankingsResponseObject>;
-  sp?: NumberRequest<RankingsResponseObject>;
-  trsp?: NumberRequest<RankingsResponseObject>;
-  max_score?: NumberRequest<RankingsResponseObject>;
-  opr?: NumberRequest<RankingsResponseObject>;
-  dpr?: NumberRequest<RankingsResponseObject>;
-  ccwm?: NumberRequest<RankingsResponseObject>;
+  wins?: number;
+  losses?: number;
+  ties?: number;
+  wp?: number;
+  ap?: number;
+  sp?: number;
+  trsp?: number;
+  max_score?: number;
+  opr?: number;
+  dpr?: number;
+  ccwm?: number;
 }
 
 export interface SeasonRankingsRequestObject {
-  program?: StringRequest<SeasonRankingsResponseObject, "VRC" | "VEXU">;
-  season?: StringRequest<SeasonRankingsResponseObject, Seasons>;
-  team?: StringRequest<SeasonRankingsResponseObject>;
-  vrating_rank?: NumberRequest<SeasonRankingsResponseObject>;
+  program?: Programs;
+  season?: Seasons;
+  team?: string;
+  vrating_rank?: number;
   limit_number?: number;
   limit_start?: number;
 
-  vrating?: NumberRequest<SeasonRankingsResponseObject>;
+  vrating?: number;
 }
 
 export interface AwardsRequestObject {
-  sku?: StringRequest<AwardsResponseObject>;
-  name?: StringRequest<AwardsResponseObject>;
-  team?: StringRequest<AwardsResponseObject>;
-  season?: StringRequest<AwardsResponseObject, Seasons>;
+  sku?: string;
+  name?: string;
+  team?: string;
+  season?: Seasons;
   limit_number?: number;
   limit_start?: number;
 
-  order?: NumberRequest<AwardsResponseObject>;
+  order?: number;
+}
+
+export enum SkillsType {
+  Driver = 0,
+  Programming = 1,
+  Robot = 2,
 }
 
 export interface SkillsRequestObject {
-  sku?: StringRequest<SkillsResponseObject>;
-  program?: StringRequest<SkillsResponseObject, "VRC" | "VEXU">;
-  type?: NumberRequest<SkillsResponseObject, 0 | 1 | 2>;
-  team?: StringRequest<SkillsResponseObject>;
-  season?: StringRequest<SkillsResponseObject, Seasons>;
-  rank?: NumberRequest<SkillsResponseObject>;
-  season_rank?: NumberRequest<SkillsResponseObject>;
+  sku?: string;
+  program?: Programs;
+  type?: SkillsType;
+  team?: string;
+  season?: Seasons;
+  rank?: number;
+  season_rank?: number;
   limit_number?: number;
   limit_start?: number;
 
-  attempts?: NumberRequest<SkillsResponseObject>;
-  score?: NumberRequest<SkillsResponseObject>;
+  attempts?: number;
+  score?: number;
 }
 
 export const endpoints: Endpoint[] = [
@@ -203,7 +191,8 @@ export const endpoints: Endpoint[] = [
   "skills",
 ];
 
-export const validParams = {
+// For each endpoint, parameters that can be passed directly to vexdb
+export const passableParams = {
   events: [
     "sku",
     "program",
