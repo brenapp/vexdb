@@ -59,7 +59,8 @@ export type Seasons =
   | "Round Up"
   | "Clean Sweep"
   | "Elevation"
-  | "Bridge Battle";
+  | "Bridge Battle"
+  | "current";
 
 export interface TeamsRequestObject {
   team?: StringRequest<TeamsResponseObject>;
