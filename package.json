@@ -6,7 +6,7 @@
   "typings": "./out/main.d.ts",
   "scripts": {
     "test": "tsc -d && nyc ava && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "prepublish": "tsc -d"
+    "prepublish": "rm -rf out && tsc -d"
   },
   "engines": {
     "node": ">=8.6.0"

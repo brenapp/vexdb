@@ -2,4 +2,3 @@ node_modules
 coverage.lcov
 .nyc_output
 yarn-error.log
-out
