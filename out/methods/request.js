@@ -94,9 +94,7 @@ function doRequest(endpoint, params) {
         var entry, data;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log("doRequest", endpoint, params);
-                    return [4, cache.resolve(endpoint, params)];
+                case 0: return [4, cache.resolve(endpoint, params)];
                 case 1:
                     entry = _a.sent();
                     if (entry !== null) {
