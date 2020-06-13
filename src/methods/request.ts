@@ -39,7 +39,6 @@ async function doRequest(
   endpoint,
   params: object = {}
 ): Promise<cache.APIResponse<any>> {
-  console.log("doRequest", endpoint, params);
 
   // Check Cache
   const entry = await cache.resolve(endpoint, params);
