@@ -47,7 +47,12 @@ export type Filter<
   ResponseObject,
   Key extends keyof ResponseObject,
   Direct extends ResponseObject[Key]
-> = ((key: Key, full: ResponseObject) => Promise<boolean> | boolean) | Direct;
+> =
+  | ((
+      key: ResponseObject[Key],
+      full: ResponseObject
+    ) => Promise<boolean> | boolean)
+  | Direct;
 
 export type Grades = "Middle School" | "High School" | "Collge";
 export type Programs = "VEXU" | "VRC";

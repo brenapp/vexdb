@@ -61,10 +61,7 @@ export default async function get(
   params: SkillsRequestObject
 ): Promise<SkillsResponseObject[]>;
 
-export default async function get(
-  endpoint: string,
-  params: { [key: string]: string | number }
-) {
+export default async function get(endpoint: string, params: object) {
   const endpoints = Object.keys(passableParams);
 
   if (!endpoints.includes(endpoint)) {
@@ -77,12 +74,41 @@ export default async function get(
     );
   }
 
+  // Get the params we can pass to vexbot (on the list of passable params and not functions)
+  const passable: string[] = passableParams[endpoint];
+
+  let raw = {};
+  let filter: [
+    string,
+    (k: any, full: object) => boolean | Promise<boolean>
+  ][] = [];
+
+  for (const [key, value] of Object.entries(params)) {
+    if (passable.includes(key) && typeof value !== "function") {
+      raw[key] = value;
+    } else {
+      filter.push([key, value]);
+    }
+  }
+
   // We can go ahead and pass everything to vexdb, it will ignore things it doesn't understand
-  const response = await requestAll(endpoint, params);
+  const response = await requestAll(endpoint, raw);
 
   if (!response.status) {
     return Promise.reject(response);
   }
 
-  return response.result;
+  const final = [];
+
+  for (const result of response.result) {
+    const accept = await Promise.all(
+      filter.map(([key, fn]) => fn(result[key], result))
+    );
+
+    if (accept.every((r) => r)) {
+      final.push(result);
+    }
+  }
+
+  return final;
 }
