@@ -5,10 +5,18 @@
  */
 
 import "isomorphic-fetch";
-import { Endpoint } from "../constants/RequestObjects";
 import { settings } from "../constants/settings";
 import * as cache from "./cache";
 import { ResponseObject } from "../constants/ResponseObjects";
+
+// Request queuing (only allow so many concurrent requests at once)
+import PQueue from "p-queue";
+
+// Right now, this won't update with settings, but p-queue supports changing concurrency
+// @TODO add setter in the settings to update this
+export const queue = new PQueue({
+  concurrency: settings.maxConcurrentRequests,
+});
 
 /**
  * Converts a parameters object into URL Encoded String
@@ -27,7 +35,12 @@ export function serialize(params: object) {
   return str;
 }
 
-export async function request(endpoint, params: object = {}) {
+async function doRequest(
+  endpoint,
+  params: object = {}
+): Promise<cache.APIResponse<any>> {
+  console.log("doRequest", endpoint, params);
+
   // Check Cache
   const entry = await cache.resolve(endpoint, params);
 
@@ -55,30 +68,44 @@ export async function request(endpoint, params: object = {}) {
   }
 }
 
-export async function requestSize(endpoint, params) {
-  return request(
-    endpoint,
-    Object.assign({}, params, { nodata: true })
-  ).then((res) => (res ? res.size : 0));
+export async function request<T extends ResponseObject = ResponseObject>(
+  endpoint,
+  params: object = {}
+): Promise<cache.APIResponse<T>> {
+  return queue.add<cache.APIResponse<T>>(() => doRequest(endpoint, params));
 }
 
-export default async function requestAll(
+export async function requestSize<T extends ResponseObject = ResponseObject>(
   endpoint,
   params
-): Promise<{ status: 0 | 1; size: number; result: ResponseObject[] }> {
-  return requestSize(endpoint, params)
-    .then((size) =>
-      Promise.all(
-        new Array(Math.ceil(size / 5000))
-          .fill(endpoint)
-          .map((e, i) =>
-            request(endpoint, { ...params, limit_start: i * 5000 })
-          )
+) {
+  return request<T>(
+    endpoint,
+    Object.assign({}, params, { nodata: true })
+  ).then((res) => (res.status ? res.size : 0));
+}
+
+export default async function requestAll<
+  T extends ResponseObject = ResponseObject
+>(endpoint, params): Promise<cache.APIResponse<T>> {
+  return (
+    requestSize<T>(endpoint, params)
+      .then((size) =>
+        Promise.all(
+          new Array(Math.ceil(size / 5000))
+            .fill(endpoint)
+            .map((e, i) =>
+              request<T>(endpoint, { ...params, limit_start: i * 5000 })
+            )
+        )
       )
-    )
-    .then((result) => ({
-      status: result[0] ? result[0].status : 0,
-      size: result.reduce((a, b) => a + b.size, 0),
-      result: result.reduce((a, b) => a.concat(b.result), []),
-    }));
+
+      // Only consider the successfully results
+      .then((results) => results.filter((r) => r.status === 1))
+      .then((results: cache.APISuccess<T>[]) => ({
+        status: 1,
+        size: results.reduce((a, b) => a + b.size, 0),
+        result: results.map((r) => r.result).flat(),
+      }))
+  );
 }

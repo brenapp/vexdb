@@ -25,16 +25,22 @@ import {
   SkillsResponseObject,
   ResponseObject,
 } from "../constants/ResponseObjects";
-import { serialize } from "./request";
 
 import * as keya from "keya";
-import SQLiteStore from "keya/out/node/sqlite";
 
-export interface APIResponse<T> {
-  status: 0 | 1;
+export interface APISuccess<T> {
+  status: 1;
   size: number;
   result: T[];
 }
+
+export interface APIFailure<T> {
+  status: 0;
+  error_code: number;
+  error_text: string;
+}
+
+export type APIResponse<T> = APISuccess<T> | APIFailure<T>;
 
 export interface CacheEntry<T> {
   expires: number;

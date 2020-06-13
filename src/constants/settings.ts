@@ -8,6 +8,7 @@ interface settings {
   cache: {
     ttl: number;
   };
+  maxConcurrentRequests: number;
   headers: { [header: string]: string };
   params: RequestObject;
   baseURL: string;
@@ -20,6 +21,7 @@ let settings: settings = {
   cache: {
     ttl: 4 * 60 * 1000,
   },
+  maxConcurrentRequests: 100,
   headers: {
     "User-Agent": "vexdb (nodejs)",
   },
