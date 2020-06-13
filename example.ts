@@ -1,11 +1,11 @@
 import * as vexdb from "./src/main";
 
-// vexdb
-//   .get("teams", {
-//     team_name: "Some Assembly Required",
-//   })
-//   .then(console.log);
+(async function () {
+  const teams = await vexdb.get("teams", { program: "VEXU" });
 
-// vexdb.get("events", { season: "Nothing But Net" }).then(console.log);
+  const events = await Promise.all(
+    teams.map((team) => vexdb.get("events", { team: team.number }))
+  );
 
-vexdb.get("matches", { team: "3796B" }).then(console.log);
+  console.log(events);
+})();
