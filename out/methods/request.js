@@ -11,11 +11,10 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -80,7 +79,7 @@ function request(endpoint, params) {
                     if (entry !== null) {
                         return [2, entry];
                     }
-                    return [4, fetch(settings_1.settings.baseURL + "/get_" + endpoint + "?" + serialize(__assign(__assign({}, settings_1.settings.params), params)), {
+                    return [4, fetch(settings_1.settings.baseURL + "/get_" + endpoint + "?" + serialize(__assign({}, settings_1.settings.params, params)), {
                             headers: settings_1.settings.headers,
                         }).then(function (data) { return data.json(); })];
                 case 2:
@@ -112,7 +111,7 @@ function requestAll(endpoint, params) {
                     return Promise.all(new Array(Math.ceil(size / 5000))
                         .fill(endpoint)
                         .map(function (e, i) {
-                        return request(endpoint, __assign(__assign({}, params), { limit_start: i * 5000 }));
+                        return request(endpoint, __assign({}, params, { limit_start: i * 5000 }));
                     }));
                 })
                     .then(function (result) { return ({

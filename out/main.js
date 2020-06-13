@@ -34,5 +34,5 @@ exports.live = live_1.default;
 var req = __importStar(require("./constants/RequestObjects"));
 var res = __importStar(require("./constants/ResponseObjects"));
 var settings = __importStar(require("./constants/settings"));
-var constant = __assign(__assign(__assign({}, req), res), settings);
+var constant = __assign({}, req, res, settings);
 exports.constant = constant;

@@ -43,32 +43,38 @@ export type Seasons =
   | "Bridge Battle"
   | "current";
 
+export type Filter<
+  ResponseObject,
+  Key extends keyof ResponseObject,
+  Direct extends ResponseObject[Key]
+> = ((key: Key, full: ResponseObject) => Promise<boolean> | boolean) | Direct;
+
 export type Grades = "Middle School" | "High School" | "Collge";
 export type Programs = "VEXU" | "VRC";
 
 export interface TeamsRequestObject {
   team?: string;
-  number?: string;
-  team_name?: string;
-  robot_name?: string;
-  program?: Programs;
-  organisation?: string;
-  city?: string;
-  region?: string;
-  country?: string;
-  grade?: Grades;
+  number?: Filter<TeamsResponseObject, "number", string>;
+  team_name?: Filter<TeamsResponseObject, "team_name", string>;
+  robot_name?: Filter<TeamsResponseObject, "robot_name", string>;
+  program?: Filter<TeamsResponseObject, "program", Programs>;
+  organisation?: Filter<TeamsResponseObject, "organisation", string>;
+  city?: Filter<TeamsResponseObject, "city", string>;
+  region?: Filter<TeamsResponseObject, "region", string>;
+  country?: Filter<TeamsResponseObject, "country", string>;
+  grade?: Filter<TeamsResponseObject, "country", Grades>;
 
-  // is_registered?: 0 | 1;
-  // sku?: string;
-  // limit_number?: number;
-  // limit_start?: number;
+  is_registered?: 0 | 1;
+  sku?: string;
+  limit_number?: number;
+  limit_start?: number;
 }
 
 export interface EventsRequestObject {
   sku?: string;
-  program?: Programs;
+  program?: Filter<EventsResponseObject, "program", Programs>;
   date?: string;
-  season?: Seasons;
+  season?: Filter<EventsResponseObject, "season", Seasons>;
   city?: string;
   region?: string;
   country?: string;
@@ -77,87 +83,87 @@ export interface EventsRequestObject {
   limit_start?: number;
   team?: string;
 
-  // key?: string;
-  // name?: string;
-  // loc_venue?: string;
-  // loc_address1?: string;
-  // loc_address2?: string;
-  // loc_city?: string;
-  // loc_region?: string;
-  // loc_postcode?: string;
-  // loc_country?: string;
-  // start?: string;
-  // end?: string;
+  key?: Filter<EventsResponseObject, "key", string>;
+  name?: Filter<EventsResponseObject, "name", string>;
+  loc_venue?: Filter<EventsResponseObject, "loc_venue", string>;
+  loc_address1?: Filter<EventsResponseObject, "loc_address1", string>;
+  loc_address2?: Filter<EventsResponseObject, "loc_address2", string>;
+  loc_city?: Filter<EventsResponseObject, "loc_city", string>;
+  loc_region?: Filter<EventsResponseObject, "loc_region", string>;
+  loc_postcode?: Filter<EventsResponseObject, "loc_postcode", string>;
+  loc_country?: Filter<EventsResponseObject, "loc_country", string>;
+  start?: Filter<EventsResponseObject, "start", string>;
+  end?: Filter<EventsResponseObject, "end", string>;
 }
 
 export interface MatchesRequestObject {
-  sku?: string;
-  division?: string;
+  sku?: Filter<MatchesResponseObject, "sku", string>;
+  division?: Filter<MatchesResponseObject, "division", string>;
   team?: string;
   round?: 1 | 2 | 3 | 4 | 5 | 16;
-  instance?: number;
-  matchnum?: number;
-  scheduled?: number;
-  field?: string;
+  instance?: Filter<MatchesResponseObject, "instance", number>;
+  matchnum?: Filter<MatchesResponseObject, "matchnum", number>;
+  scheduled?: Filter<MatchesResponseObject, "scheduled", string>;
+  field?: Filter<MatchesResponseObject, "field", string>;
   scored?: 0 | 1;
   season?: Seasons;
   limit_number?: number;
   limit_start?: number;
 
-  // red1?: string;
-  // red2?: string;
-  // red3?: string;
-  // redsit?: string;
-  // blue1?: string;
-  // blue2?: string;
-  // blue3?: string;
-  // bluesit?: string;
-  // redscore?: number;
-  // bluescore?: number;
+  red1?: Filter<MatchesResponseObject, "red1", string>;
+  red2?: Filter<MatchesResponseObject, "red2", string>;
+  red3?: Filter<MatchesResponseObject, "red3", string>;
+  redsit?: Filter<MatchesResponseObject, "redsit", string>;
+  blue1?: Filter<MatchesResponseObject, "blue1", string>;
+  blue2?: Filter<MatchesResponseObject, "blue2", string>;
+  blue3?: Filter<MatchesResponseObject, "blue3", string>;
+  bluesit?: Filter<MatchesResponseObject, "bluesit", string>;
+  redscore?: Filter<MatchesResponseObject, "redscore", number>;
+  bluescore?: Filter<MatchesResponseObject, "bluescore", number>;
 }
 
 export interface RankingsRequestObject {
-  sku?: string;
-  division?: string;
-  team?: string;
-  rank?: string;
+  sku?: Filter<RankingsResponseObject, "sku", string>;
+  division?: Filter<RankingsResponseObject, "division", string>;
+  team?: Filter<RankingsResponseObject, "team", string>;
+  rank?: Filter<RankingsResponseObject, "rank", number>;
   season?: Seasons;
   limit_number?: number;
   limit_start?: number;
 
-  // wins?: number;
-  // losses?: number;
-  // ties?: number;
-  // wp?: number;
-  // ap?: number;
-  // sp?: number;
-  // trsp?: number;
-  // max_score?: number;
-  // opr?: number;
-  // dpr?: number;
-  // ccwm?: number;
+  wins?: Filter<RankingsResponseObject, "wins", number>;
+  losses?: Filter<RankingsResponseObject, "losses", number>;
+  ties?: Filter<RankingsResponseObject, "ties", number>;
+  wp?: Filter<RankingsResponseObject, "wp", number>;
+  ap?: Filter<RankingsResponseObject, "ap", number>;
+  sp?: Filter<RankingsResponseObject, "sp", number>;
+  trsp?: Filter<RankingsResponseObject, "trsp", number>;
+  max_score?: Filter<RankingsResponseObject, "max_score", number>;
+  opr?: Filter<RankingsResponseObject, "opr", number>;
+  dpr?: Filter<RankingsResponseObject, "dpr", number>;
+  ccwm?: Filter<RankingsResponseObject, "ccwm", number>;
 }
 
 export interface SeasonRankingsRequestObject {
-  program?: Programs;
-  season?: Seasons;
-  team?: string;
-  vrating_rank?: number;
+  program?: Filter<SeasonRankingsResponseObject, "program", Programs>;
+  season?: Filter<SeasonRankingsResponseObject, "season", Seasons>;
+  team?: Filter<SeasonRankingsResponseObject, "team", string>;
+  vrating_rank?: Filter<SeasonRankingsResponseObject, "vrating_rank", number>;
   limit_number?: number;
   limit_start?: number;
 
-  // vrating?: number;
+  vrating?: Filter<SeasonRankingsResponseObject, "vrating", number>;
 }
 
 export interface AwardsRequestObject {
-  sku?: string;
-  name?: string;
-  team?: string;
+  sku?: Filter<AwardsResponseObject, "sku", string>;
+  name?: Filter<AwardsResponseObject, "name", string>;
+  team?: Filter<AwardsResponseObject, "team", string>;
   season?: Seasons;
   limit_number?: number;
   limit_start?: number;
 
-  // order?: number;
+  order?: Filter<AwardsResponseObject, "order", number>;
 }
 
 export enum SkillsType {
@@ -167,18 +173,18 @@ export enum SkillsType {
 }
 
 export interface SkillsRequestObject {
-  sku?: string;
-  program?: Programs;
-  type?: SkillsType;
-  team?: string;
+  sku?: Filter<SkillsResponseObject, "sku", string>;
+  program?: Filter<SkillsResponseObject, "program", Programs>;
+  type?: Filter<SkillsResponseObject, "type", SkillsType>;
+  team?: Filter<SkillsResponseObject, "team", string>;
   season?: Seasons;
-  rank?: number;
+  rank?: Filter<SkillsResponseObject, "rank", number>;
   season_rank?: number;
   limit_number?: number;
   limit_start?: number;
 
-  // attempts?: number;
-  // score?: number;
+  attempts?: Filter<SkillsResponseObject, "attempts", number>;
+  score?: Filter<SkillsResponseObject, "score", number>;
 }
 
 export const endpoints: Endpoint[] = [

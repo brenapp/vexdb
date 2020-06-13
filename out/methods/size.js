@@ -16,6 +16,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var get_1 = __importDefault(require("./get"));
 function size(endpoint, params) {
-    return get_1.default(endpoint, __assign(__assign({}, params), { nodata: true })).then(function (r) { return r.length; });
+    return get_1.default(endpoint, __assign({}, params, { nodata: true })).then(function (r) { return r.length; });
 }
 exports.default = size;

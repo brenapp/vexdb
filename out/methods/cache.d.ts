@@ -1,10 +1,14 @@
 import { TeamsRequestObject, EventsRequestObject, MatchesRequestObject, RankingsRequestObject, SeasonRankingsRequestObject, AwardsRequestObject, SkillsRequestObject } from "../constants/RequestObjects";
 import { TeamsResponseObject, EventsResponseObject, MatchesResponseObject, RankingsResponseObject, SeasonRankingsResponseObject, AwardsResponseObject, SkillsResponseObject } from "../constants/ResponseObjects";
-export interface APIResponse<T> {
-    status: 0 | 1;
+export declare type APIResponse<T> = {
+    status: 1;
     size: number;
     result: T[];
-}
+} | {
+    status: 0;
+    error_code: number;
+    error_text: string;
+};
 export interface CacheEntry<T> {
     expires: number;
     value: APIResponse<T>;
