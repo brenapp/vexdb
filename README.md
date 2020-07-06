@@ -1,5 +1,7 @@
 ## VexDB
 
+> Deprecation Notice: This module is no longer recieving new features. If you need to access data from [RobotEvents](https://robotevents.com), use [robotevents](https://github.com/MayorMonty/robotevents) which uses the new RobotEvents API v2.
+
 [![Build Status](https://travis-ci.org/MayorMonty/vexdb.svg?branch=master)](https://travis-ci.org/MayorMonty/vexdb) [![codecov](https://codecov.io/gh/MayorMonty/vexdb/branch/master/graph/badge.svg)](https://codecov.io/gh/MayorMonty/vexdb) [![npm](https://img.shields.io/npm/dm/vexdb.svg)](https://npm.im/vexdb)
 
 `vexdb` is a wrapper for [VexDB](https://vexdb.io).
