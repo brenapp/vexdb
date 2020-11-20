@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/MayorMonty/vexdb#readme",
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
+    "isomorphic-fetch": "^3.0.0",
     "keya": "^2.0.0",
     "p-queue": "^6.4.0"
   },
